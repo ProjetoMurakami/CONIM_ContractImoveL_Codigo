@@ -12,10 +12,5 @@ Descreva em detalhes a solicitação de
 nova funcionalidade, melhoria,
 problema, dúvida, etc.
 
-**Modificações realizadas:**
-Descreva quais modificações foram realizadas no código.
-- Modificação 1
-- Modificação 2
-
 **Informações adicionais:**
 Informações adicionais.
