@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 import ContractImovel.model.Pagamento;
 import ContractImovel.util.jpa.Transactional;
 
-public class PagamentoDao implements Serializable {
+public class pagamentoDao implements Serializable {
     private static final long serialVersionUID = 1L;
     @Inject
     private EntityManager manager;
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(PagamentoDao.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(pagamentoDao.class);
 
 
 	@Transactional

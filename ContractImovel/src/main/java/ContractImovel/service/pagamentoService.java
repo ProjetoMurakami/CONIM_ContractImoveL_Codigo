@@ -6,14 +6,14 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ContractImovel.model.Pagamento;
-import ContractImovel.model.dao.PagamentoDao;
+import ContractImovel.model.dao.pagamentoDao;
 
 public class pagamentoService implements Serializable {
 
     private static final long serialVersionUID = 1L;
     
     @Inject
-    private PagamentoDao pagamentoDao;
+    private pagamentoDao pagamentoDao;
     
     public List<Pagamento> listarTodos() {
         return pagamentoDao.buscarTodos();

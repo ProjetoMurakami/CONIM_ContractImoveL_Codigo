@@ -23,7 +23,7 @@
             </p:toolbar>
 
             <!-- Tabela de Inquilinos -->
-            <p:dataTable id="inquilinosTable" var="inquilino" value="#{manterInquilinoBean.inquilinos}"
+            <p:dataTable id="inquilinosTable" var="inquilino" value="#{inquilinoBean.inquilinos}"
                 lazy="false" showGridlines="true" style="margin-top: 20px"
                 emptyMessage="Nenhum inquilino encontrado." rows="10" paginator="true"
                 paginatorAlwaysVisible="true" paginatorPosition="bottom" rowsPerPageTemplate="5,10,15">
@@ -52,10 +52,10 @@
                     <p:commandButton id="cbEditarInquilino" icon="pi pi-pencil" title="Editar"
                         oncomplete="PF('editarInquilinoDialogWidgetVar').show()"
                         update=":formularioInquilino:editarInquilinoDialog" process="@this">
-                        <f:setPropertyActionListener target="#{manterInquilinoBean.inquilino}" value="#{inquilino}" />
+                        <f:setPropertyActionListener target="#{inquilinoBean.inquilino}" value="#{inquilino}" />
                     </p:commandButton>
                     <p:commandButton icon="pi pi-trash" title="Excluir" onclick="PF('confirmacaoExclusaoInquilino').show();" process="@this">
-                        <f:setPropertyActionListener target="#{manterInquilinoBean.inquilino}" value="#{inquilino}" />
+                        <f:setPropertyActionListener target="#{inquilinoBean.inquilino}" value="#{inquilino}" />
                     </p:commandButton>
                 </p:column>
 
@@ -67,24 +67,24 @@
 
                 <p:panelGrid id="gridInquilino" columns="2" style="width: 100%">
                     <p:outputLabel for="id" value="ID: " />
-                    <p:outputLabel id="id" value="#{manterInquilinoBean.inquilino.id}" rendered="#{manterInquilinoBean.inquilino.id != null}" />
-                    <p:outputLabel id="idNovo" value="Novo" rendered="#{manterInquilinoBean.inquilino.id == null}" />
+                    <p:outputLabel id="id" value="#{inquilinoBean.inquilino.id}" rendered="#{inquilinoBean.inquilino.id != null}" />
+                    <p:outputLabel id="idNovo" value="Novo" rendered="#{inquilinoBean.inquilino.id == null}" />
 
                     <p:outputLabel for="nome" value="Nome: " />
-                    <p:inputText id="nome" value="#{manterInquilinoBean.inquilino.nome}" maxlength="100" />
+                    <p:inputText id="nome" value="#{inquilinoBean.inquilino.nome}" maxlength="100" />
 
                     <p:outputLabel for="cpf" value="CPF: " />
-                    <p:inputMask id="cpf" value="#{manterInquilinoBean.inquilino.cpf}" mask="999.999.999-99" />
+                    <p:inputMask id="cpf" value="#{inquilinoBean.inquilino.cpf}" mask="999.999.999-99" />
 
                     <p:outputLabel for="telefone" value="Telefone: " />
-                    <p:inputMask id="telefone" value="#{manterInquilinoBean.inquilino.telefone}" mask="(99) 99999-9999" />
+                    <p:inputMask id="telefone" value="#{inquilinoBean.inquilino.telefone}" mask="(99) 99999-9999" />
 
                     <p:outputLabel for="email" value="Email: " />
-                    <p:inputText id="email" value="#{manterInquilinoBean.inquilino.email}" />
+                    <p:inputText id="email" value="#{inquilinoBean.inquilino.email}" />
 
                     <p:commandButton icon="pi pi-save" id="salvarInquilinoButton" value="Salvar"
                         title="Gravar dados do inquilino"
-                        actionListener="#{manterInquilinoBean.salvar}"
+                        actionListener="#{inquilinoBean.salvar}"
                         oncomplete="if (!args.validationFailed) {PF('editarInquilinoDialogWidgetVar').hide();}"
                         update="growlInquilino inquilinosTable" process="@this gridInquilino" />
                 </p:panelGrid>
@@ -93,11 +93,11 @@
 
    
             <p:confirmDialog id="confirmacaoExclusaoInquilinoDialog" widgetVar="confirmacaoExclusaoInquilino"
-                message="Tem certeza que deseja excluir o inquilino #{manterInquilinoBean.inquilino.nome}?"
+                message="Tem certeza que deseja excluir o inquilino #{inquilinoBean.inquilino.nome}?"
                 header="Exclusão de inquilino" severity="alert">
                 <p:button icon="pi pi-thumbs-down" value="Não" onclick="PF('confirmacaoExclusaoInquilino').hide(); return false;" process="@this"/>
                 <p:commandButton icon="pi pi-thumbs-up" value="Sim" update=":formularioInquilino:inquilinosTable"
-                    onclick="PF('confirmacaoExclusaoInquilino').hide();" action="#{manterInquilinoBean.excluir}" process="@this"/>
+                    onclick="PF('confirmacaoExclusaoInquilino').hide();" action="#{inquilinoBean.excluir}" process="@this"/>
             </p:confirmDialog>
 
         </h:form>

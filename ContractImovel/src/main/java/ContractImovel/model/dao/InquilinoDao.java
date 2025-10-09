@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 import ContractImovel.model.Inquilino;
 import ContractImovel.util.jpa.Transactional;
 
-public class InquilinoDao implements Serializable{
+public class inquilinoDao implements Serializable{
     private static final long serialVersionUID = 1L;
     @Inject
     private EntityManager manager;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(InquilinoDao.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(inquilinoDao.class);
 
     @Transactional
     public Inquilino salvar(Inquilino inquilino) throws PersistenceException{

@@ -6,13 +6,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 import ContractImovel.model.Imovel;
-import ContractImovel.model.dao.ImovelDao;
+import ContractImovel.model.dao.imovelDao;
 
 public class imovelService implements Serializable{
 
     private static final long serialVersionUID = 1L;
 	@Inject	
-	private ImovelDao imovelDao;
+	private imovelDao imovelDao;
 	
 	public void salvar(Imovel imovel) {
 		imovelDao.salvar(imovel);

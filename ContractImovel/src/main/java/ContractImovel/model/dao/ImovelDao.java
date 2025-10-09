@@ -14,12 +14,12 @@ import org.slf4j.LoggerFactory;
 import ContractImovel.model.Imovel;
 import ContractImovel.util.jpa.Transactional;
 
-public class ImovelDao implements Serializable{
+public class imovelDao implements Serializable{
     private static final long serialVersionUID = 1L;
     @Inject
     private EntityManager manager;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImovelDao.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(imovelDao.class);
 	
 	@Transactional
 	public Imovel salvar(Imovel imovel) throws PersistenceException {
