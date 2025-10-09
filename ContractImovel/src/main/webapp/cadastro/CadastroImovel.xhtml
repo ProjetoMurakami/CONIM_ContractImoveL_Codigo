@@ -25,7 +25,7 @@
 				</p:toolbarGroup>
 			</p:toolbar>
 			
-			<p:dataTable id="imoveisTable" var="imovel" value="#{manterImovelBean.imoveis}"
+			<p:dataTable id="imoveisTable" var="imovel" value="#{imovelBean.imoveis}"
 				lazy="false" showGridlines="true"
 	    		style="margin-top: 20px" emptyMessage="Nenhum imóvel encontrado." rows="10"
 	    		paginator="true" paginatorAlwaysVisible="true" paginatorPosition="bottom"
@@ -83,14 +83,14 @@
 		            	oncomplete="PF('editarDialogWidgetVar').show()"
 		            	update=":formulario:editarDialog"		            	
 		            	process="@this">
-		            	<f:setPropertyActionListener target="#{manterImovelBean.imovel}" 
+		            	<f:setPropertyActionListener target="#{imovelBean.imovel}" 
 							value="#{imovel}" />
 	            	</p:commandButton>
 
 					<p:commandButton icon="pi pi-trash"  title="Excluir"
 						onclick="PF('confirmacaoExclusao').show();"
 						process="@this">
-						<f:setPropertyActionListener target="#{manterImovelBean.imovel}"
+						<f:setPropertyActionListener target="#{imovelBean.imovel}"
 							value="#{imovel}" />
 					</p:commandButton>
 				</p:column>
@@ -106,52 +106,52 @@
 		<p:panelGrid id="grid" columns="2" style="width: 100%">
 
 			<p:outputLabel for="id" value="ID: " />
-			<p:outputLabel id="id" value="#{manterImovelBean.imovel.id}" rendered="#{manterImovelBean.imovel.id != null}" />
-			<p:outputLabel id="idNovo" value="Novo" rendered="#{manterImovelBean.imovel.id == null}" />
+			<p:outputLabel id="id" value="#{imovelBean.imovel.id}" rendered="#{imovelBean.imovel.id != null}" />
+			<p:outputLabel id="idNovo" value="Novo" rendered="#{imovelBean.imovel.id == null}" />
 			
 			<p:outputLabel for="cep" value="CEP: " />
-			<p:inputText id="cep" value="#{manterImovelBean.imovel.CEP}" maxlength="9" />
+			<p:inputText id="cep" value="#{imovelBean.imovel.CEP}" maxlength="9" />
 
 			<p:outputLabel for="cidade" value="Cidade: " />
-			<p:inputText id="cidade" value="#{manterImovelBean.imovel.cidade}"/>
+			<p:inputText id="cidade" value="#{imovelBean.imovel.cidade}"/>
 
 			<p:outputLabel for="bairro" value="Bairro: " />
-			<p:inputText id="bairro" value="#{manterImovelBean.imovel.bairro}" />
+			<p:inputText id="bairro" value="#{imovelBean.imovel.bairro}" />
 
 			<p:outputLabel for="endereco" value="Endereço: " />
-			<p:inputText id="endereco" value="#{manterImovelBean.imovel.endereco}" />
+			<p:inputText id="endereco" value="#{imovelBean.imovel.endereco}" />
 
 			<p:outputLabel for="numero" value="Número: " />
-			<p:inputText id="numero" value="#{manterImovelBean.imovel.numero}" />
+			<p:inputText id="numero" value="#{imovelBean.imovel.numero}" />
 
 			<p:outputLabel for="quartos" value="Quartos: " />
-			<p:spinner id="quartos" value="#{manterImovelBean.imovel.quartos}" min="0" />
+			<p:spinner id="quartos" value="#{imovelBean.imovel.quartos}" min="0" />
 
 			<p:outputLabel for="banheiros" value="Banheiros: " />
-			<p:spinner id="banheiros" value="#{manterImovelBean.imovel.banheiros}" min="0" />
+			<p:spinner id="banheiros" value="#{imovelBean.imovel.banheiros}" min="0" />
 
 			<p:outputLabel for="area" value="Área (m²): " />
-			<p:inputNumber id="area" value="#{manterImovelBean.imovel.area}" decimalSeparator=","
+			<p:inputNumber id="area" value="#{imovelBean.imovel.area}" decimalSeparator=","
 				thousandSeparator="." minValue="0" />
 
 			<p:outputLabel for="valorAluguel" value="Valor Aluguel: " />
-			<p:inputNumber id="valorAluguel" value="#{manterImovelBean.imovel.valorAluguel}"
+			<p:inputNumber id="valorAluguel" value="#{imovelBean.imovel.valorAluguel}"
 				symbol="R$ " symbolPosition="p" decimalSeparator=","
 				thousandSeparator="." minValue="0" />
 
 			<p:outputLabel for="statusImovel" value="Status: " />
-	 		<p:selectOneMenu id="statusImovel" value="#{manterImovelBean.imovel.statusImovel}">
+	 		<p:selectOneMenu id="statusImovel" value="#{imovelBean.imovel.statusImovel}">
 				<f:selectItem itemLabel="Selecione o status" />
-				<f:selectItems value="#{manterImovelBean.statusImovelOptions}" />
+				<f:selectItems value="#{imovelBean.statusImovelOptions}" />
 			</p:selectOneMenu>
 
 			<p:outputLabel for="observacoes" value="Observações: " />
-			<p:inputTextarea id="observacoes" value="#{manterImovelBean.imovel.observacoes}" 
+			<p:inputTextarea id="observacoes" value="#{imovelBean.imovel.observacoes}" 
 				rows="3" cols="30" autoResize="true" />
 
 			<p:commandButton icon="pi pi-save" id="salvarButton"
 				value="Salvar" title="Gravar dados do imóvel"
-				actionListener="#{manterImovelBean.salvar}"
+				actionListener="#{imovelBean.salvar}"
 				oncomplete="if (!args.validationFailed) {PF('editarDialogWidgetVar').hide();}"
 				update="growl imoveisTable" process="@this grid">
 			</p:commandButton>						
@@ -162,7 +162,7 @@
 	
 	<p:confirmDialog id="confirmacaoExclusaoDialog"
 				widgetVar="confirmacaoExclusao"
-				message="Tem certeza que deseja excluir o imóvel localizado em #{manterImovelBean.imovel.endereco}, #{manterImovelBean.imovel.numero}?"
+				message="Tem certeza que deseja excluir o imóvel localizado em #{imovelBean.imovel.endereco}, #{imovelBean.imovel.numero}?"
 				header="Exclusão de imóvel" severity="alert">
 				<p:button icon="pi pi-thumbs-down" value="Não"
 					onclick="PF('confirmacaoExclusao').hide(); return false;" 
@@ -170,7 +170,7 @@
 				<p:commandButton icon="pi pi-thumbs-up" value="Sim" 
 				    update=":formulario:imoveisTable"
 					onclick="PF('confirmacaoExclusao').hide();"
-					action="#{manterImovelBean.excluir}"
+					action="#{imovelBean.excluir}"
 					process="@this"/>
 			</p:confirmDialog>	
 

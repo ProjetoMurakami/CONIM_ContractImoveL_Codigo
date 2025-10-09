@@ -2,6 +2,7 @@ package ContractImovel.model;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -38,4 +39,14 @@ public class Pagamento implements Serializable{
     
     @Enumerated(EnumType.STRING) // Salva o valor do enum como texto
     private FormasDePagamento formaDePagamento;
+
+    public String getDataPagamentoFormatada() {
+        return dataPagamento != null ? dataPagamento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+    }
+
+    public String getDataVencimentoFormatada() {
+        return dataVencimento != null ? dataVencimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
+    }
+   
 }
+
