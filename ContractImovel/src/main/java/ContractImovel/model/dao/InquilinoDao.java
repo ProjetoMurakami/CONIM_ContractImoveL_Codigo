@@ -11,9 +11,7 @@ import javax.persistence.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ContractImovel.model.Imovel;
 import ContractImovel.model.Inquilino;
-import ContractImovel.model.Pagamento;
 import ContractImovel.util.jpa.Transactional;
 
 public class InquilinoDao implements Serializable{

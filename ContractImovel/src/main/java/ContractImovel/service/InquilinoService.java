@@ -5,11 +5,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import ContractImovel.model.Imovel;
 import ContractImovel.model.Inquilino;
 import ContractImovel.model.dao.InquilinoDao;
 
-public class ManterInquilinoService implements Serializable{
+public class InquilinoService implements Serializable{
     
     private static final long serialVersionUID = 1L;
 	@Inject	

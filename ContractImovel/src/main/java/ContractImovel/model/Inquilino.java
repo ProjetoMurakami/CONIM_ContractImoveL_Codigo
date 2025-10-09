@@ -36,6 +36,6 @@ public class Inquilino implements Serializable{
     private double rendaMensal;
     
     @Enumerated(EnumType.STRING) // Salva o valor do enum como texto
-    private TiposDeCliente tiposDeCliente;
+    private TiposDeCliente categoria;
 
 }

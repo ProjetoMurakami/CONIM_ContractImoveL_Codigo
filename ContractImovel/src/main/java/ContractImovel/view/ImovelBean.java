@@ -17,19 +17,19 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import ContractImovel.enums.StatusImovel;
 import ContractImovel.model.Imovel;
-import ContractImovel.service.ManterImovelService;
+import ContractImovel.service.ImovelService;
 
 @Log4j
 @Getter
 @Setter
 @Named
 @ViewScoped
-public class manterImovelBean implements  Serializable{
+public class ImovelBean implements  Serializable{
 
     private static final long serialVersionUID = 1L;
 	
 	@Inject
-	private ManterImovelService manterImovelService;
+	private ImovelService manterImovelService;
 	private Imovel imovel = new Imovel();
 	private List<Imovel> imoveis = new ArrayList<Imovel>();
 	
