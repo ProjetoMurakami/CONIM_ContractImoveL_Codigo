@@ -33,11 +33,9 @@ public class Inquilino implements Serializable{
     private String email;
     private String cpf;
     private String telefone;
-    private String rendaMensal;
+    private double rendaMensal;
     
     @Enumerated(EnumType.STRING) // Salva o valor do enum como texto
     private TiposDeCliente tiposDeCliente;
 
-    private Integer pessoaFisica;
-    private Integer pessoaJuridica;
 }
