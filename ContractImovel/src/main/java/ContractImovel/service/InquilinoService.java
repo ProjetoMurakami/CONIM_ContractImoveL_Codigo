@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import ContractImovel.model.Inquilino;
 import ContractImovel.model.dao.InquilinoDao;
 
-public class InquilinoService implements Serializable{
+public class inquilinoService implements Serializable{
     
     private static final long serialVersionUID = 1L;
 	@Inject	

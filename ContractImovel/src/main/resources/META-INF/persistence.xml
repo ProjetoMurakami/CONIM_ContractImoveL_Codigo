@@ -9,7 +9,7 @@
 		<properties>
 			<!-- String de conexão com o BD -->
 			<property name="javax.persistence.jdbc.url"
-				value="jdbc:mysql://localhost:3306/locacao" />
+				value="jdbc:mysql://localhost:3306/locacao"/>
 			<property name="javax.persistence.jdbc.user" value="developer" />
 			<property name="javax.persistence.jdbc.password" value="ifspifsp" />
 			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />

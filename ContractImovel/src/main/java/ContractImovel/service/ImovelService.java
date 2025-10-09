@@ -8,7 +8,7 @@ import javax.inject.Inject;
 import ContractImovel.model.Imovel;
 import ContractImovel.model.dao.ImovelDao;
 
-public class ImovelService implements Serializable{
+public class imovelService implements Serializable{
 
     private static final long serialVersionUID = 1L;
 	@Inject	

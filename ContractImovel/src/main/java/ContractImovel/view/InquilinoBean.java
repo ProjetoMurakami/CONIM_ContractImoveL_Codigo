@@ -17,45 +17,45 @@ import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 import ContractImovel.enums.TiposDeCliente;
 import ContractImovel.model.Inquilino;
-import ContractImovel.service.ManterInquilinoService;
+import ContractImovel.service.inquilinoService;
 
 @Log4j
 @Getter
 @Setter
 @Named
 @ViewScoped
-public class InquilinoBean implements  Serializable{
+public class inquilinoBean implements  Serializable{
 
     private static final long serialVersionUID = 1L;
 	
 	@Inject
-	private ManterInquilinoService manterIquilinoService;
+	private inquilinoService inquilinoService;
 	private Inquilino inquilino = new Inquilino();
-	private List<Inquilino> inquilino = new ArrayList<Inquilino>();
+	private List<Inquilino> inquilinos = new ArrayList<Inquilino>();
 	
 	@PostConstruct
 	public void inicializar() {
 		log.debug("init pesquisa"); 
-		this.setImoveis(ManterInquilinoService.buscarTodos());
+		this.setInquilinos(inquilinoService.buscarTodos());
 		limpar();
 	}
 	
 	public void salvar() {
 		log.info(inquilino.toString());
-		ManterInquilinoService.salvar(inquilino);
+		inquilinoService.salvar(inquilino);
 		
 		FacesContext.getCurrentInstance().
         addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
         		"O inquilino foi cadastrado", 
         		inquilino.toString()));
 		
-		log.info("Inquilino: " + imovel.toString());
+		log.info("Inquilino: " + inquilino.toString());
 	}
 	
 	public void excluir() {
 		try {
-			ManterInquilinoService.excluir(ManterInquilinoService);
-			this.inquilinos = ManterInquilinoService.buscarTodos();
+			inquilinoService.excluir(inquilino);
+			this.inquilinos = inquilinoService.buscarTodos();
 		} catch (Exception e) {
 			e.printStackTrace();
 			FacesContext.getCurrentInstance().addMessage(null, 
@@ -68,5 +68,5 @@ public class InquilinoBean implements  Serializable{
 
 		this.inquilino = new Inquilino();
 	}
-
+}
 
