@@ -6,6 +6,7 @@ Repositório criado para armazenar os códigos desenvolvidos para o projeto CONI
 - JAVA JDK - 21;
 - apache-maven-3.9.11
 - Servidor: Tomcat 9.0
+- Mysql Ver 8.4.4
 - Path organizado.
 
 # Configurações no projeto

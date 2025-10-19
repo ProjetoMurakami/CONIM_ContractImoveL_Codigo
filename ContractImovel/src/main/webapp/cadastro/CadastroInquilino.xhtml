@@ -1,0 +1,106 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">Cadastro de Inquilinos</ui:define>
+
+    <ui:define name="corpo">
+        <h:form id="formularioInquilino">
+            <h1>Cadastro de Inquilinos</h1>
+
+            <p:growl id="growlInquilino" showDetail="false" />
+
+            <!-- Toolbar para Novo -->
+            <p:toolbar style="margin-top: 20px">
+                <p:toolbarGroup>
+                    <p:commandButton icon="pi pi-plus" value="Novo" id="botaoNovoInquilino"
+                        oncomplete="PF('editarInquilinoDialogWidgetVar').show()"
+                        update="editarInquilinoDialog" process="@this"/>
+                </p:toolbarGroup>
+            </p:toolbar>
+
+            <!-- Tabela de Inquilinos -->
+            <p:dataTable id="inquilinosTable" var="inquilino" value="#{inquilinoBean.inquilinos}"
+                lazy="false" showGridlines="true" style="margin-top: 20px"
+                emptyMessage="Nenhum inquilino encontrado." rows="10" paginator="true"
+                paginatorAlwaysVisible="true" paginatorPosition="bottom" rowsPerPageTemplate="5,10,15">
+
+                <p:column headerText="ID" style="width: 40px; text-align: center" sortBy="#{inquilino.id}">
+                    <h:outputText value="#{inquilino.id}" />
+                </p:column>
+
+                <p:column headerText="Nome" style="width: 150px; text-align: left" filterBy="#{inquilino.nome}">
+                    <h:outputText value="#{inquilino.nome}" />
+                </p:column>
+
+                <p:column headerText="CPF" style="width: 120px; text-align: left" filterBy="#{inquilino.cpf}">
+                    <h:outputText value="#{inquilino.cpf}" />
+                </p:column>
+
+                <p:column headerText="Telefone" style="width: 120px; text-align: left" filterBy="#{inquilino.telefone}">
+                    <h:outputText value="#{inquilino.telefone}" />
+                </p:column>
+
+                <p:column headerText="Email" style="width: 150px; text-align: left" filterBy="#{inquilino.email}">
+                    <h:outputText value="#{inquilino.email}" />
+                </p:column>
+
+                <p:column headerText="Operações" style="width: 100px; text-align: center">
+                    <p:commandButton id="cbEditarInquilino" icon="pi pi-pencil" title="Editar"
+                        oncomplete="PF('editarInquilinoDialogWidgetVar').show()"
+                        update=":formularioInquilino:editarInquilinoDialog" process="@this">
+                        <f:setPropertyActionListener target="#{inquilinoBean.inquilino}" value="#{inquilino}" />
+                    </p:commandButton>
+                    <p:commandButton icon="pi pi-trash" title="Excluir" onclick="PF('confirmacaoExclusaoInquilino').show();" process="@this">
+                        <f:setPropertyActionListener target="#{inquilinoBean.inquilino}" value="#{inquilino}" />
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+            <!-- Dialog para editar/novo inquilino -->
+            <p:dialog id="editarInquilinoDialog" header="Inquilino" widgetVar="editarInquilinoDialogWidgetVar"
+                modal="true" resizable="true" closeOnEscape="true" width="600px" position="center top" maximizable="true" height="auto" responsive="true">
+
+                <p:panelGrid id="gridInquilino" columns="2" style="width: 100%">
+                    <p:outputLabel for="id" value="ID: " />
+                    <p:outputLabel id="id" value="#{inquilinoBean.inquilino.id}" rendered="#{inquilinoBean.inquilino.id != null}" />
+                    <p:outputLabel id="idNovo" value="Novo" rendered="#{inquilinoBean.inquilino.id == null}" />
+
+                    <p:outputLabel for="nome" value="Nome: " />
+                    <p:inputText id="nome" value="#{inquilinoBean.inquilino.nome}" maxlength="100" />
+
+                    <p:outputLabel for="cpf" value="CPF: " />
+                    <p:inputMask id="cpf" value="#{inquilinoBean.inquilino.cpf}" mask="999.999.999-99" />
+
+                    <p:outputLabel for="telefone" value="Telefone: " />
+                    <p:inputMask id="telefone" value="#{inquilinoBean.inquilino.telefone}" mask="(99) 99999-9999" />
+
+                    <p:outputLabel for="email" value="Email: " />
+                    <p:inputText id="email" value="#{inquilinoBean.inquilino.email}" />
+
+                    <p:commandButton icon="pi pi-save" id="salvarInquilinoButton" value="Salvar"
+                        title="Gravar dados do inquilino"
+                        actionListener="#{inquilinoBean.salvar}"
+                        oncomplete="if (!args.validationFailed) {PF('editarInquilinoDialogWidgetVar').hide();}"
+                        update="growlInquilino inquilinosTable" process="@this gridInquilino" />
+                </p:panelGrid>
+
+            </p:dialog>
+
+   
+            <p:confirmDialog id="confirmacaoExclusaoInquilinoDialog" widgetVar="confirmacaoExclusaoInquilino"
+                message="Tem certeza que deseja excluir o inquilino #{inquilinoBean.inquilino.nome}?"
+                header="Exclusão de inquilino" severity="alert">
+                <p:button icon="pi pi-thumbs-down" value="Não" onclick="PF('confirmacaoExclusaoInquilino').hide(); return false;" process="@this"/>
+                <p:commandButton icon="pi pi-thumbs-up" value="Sim" update=":formularioInquilino:inquilinosTable"
+                    onclick="PF('confirmacaoExclusaoInquilino').hide();" action="#{inquilinoBean.excluir}" process="@this"/>
+            </p:confirmDialog>
+
+        </h:form>
+    </ui:define>
+
+</ui:composition>
