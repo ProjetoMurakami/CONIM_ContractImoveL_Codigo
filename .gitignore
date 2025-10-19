@@ -18,6 +18,7 @@
 *.zip
 *.tar.gz
 *.rar
+*.vscode
 
 !**/src/main/**/target/
 !**/src/test/**/target/
