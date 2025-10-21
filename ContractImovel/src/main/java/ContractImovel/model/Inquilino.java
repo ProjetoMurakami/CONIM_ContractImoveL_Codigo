@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import ContractImovel.enums.TiposDeCliente;
+import ContractImovel.enums.TiposCliente;
 
 @Getter
 @Setter
@@ -36,6 +36,6 @@ public class Inquilino implements Serializable{
     private double rendaMensal;
     
     @Enumerated(EnumType.STRING) // Salva o valor do enum como texto
-    private TiposDeCliente categoria;
+    private TiposCliente categoria;
 
 }
