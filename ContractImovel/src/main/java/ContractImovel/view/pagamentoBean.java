@@ -15,7 +15,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
-import ContractImovel.enums.FormasDePagamento;
+import ContractImovel.enums.FormasPagamento;
 import ContractImovel.model.Pagamento;
 import ContractImovel.service.pagamentoService;
 
@@ -115,8 +115,8 @@ public class pagamentoBean implements Serializable {
         }
     }
 
-    public List<FormasDePagamento> getFormasPagamento() {
-        return Arrays.asList(FormasDePagamento.values());
+    public List<FormasPagamento> getFormasPagamento() {
+        return Arrays.asList(FormasPagamento.values());
     }
 
     

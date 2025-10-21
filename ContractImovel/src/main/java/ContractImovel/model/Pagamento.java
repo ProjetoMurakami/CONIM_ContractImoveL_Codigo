@@ -16,7 +16,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import ContractImovel.enums.FormasDePagamento;
+import ContractImovel.enums.FormasPagamento;
 
 @Getter
 @Setter
@@ -38,7 +38,7 @@ public class Pagamento implements Serializable{
     private boolean status;
     
     @Enumerated(EnumType.STRING) // Salva o valor do enum como texto
-    private FormasDePagamento formaDePagamento;
+    private FormasPagamento formaDePagamento;
 
     public String getDataPagamentoFormatada() {
         return dataPagamento != null ? dataPagamento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
