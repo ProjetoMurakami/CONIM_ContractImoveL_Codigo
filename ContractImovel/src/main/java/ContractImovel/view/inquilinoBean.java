@@ -15,7 +15,7 @@ import javax.inject.Named;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
-import ContractImovel.enums.TiposDeCliente;
+import ContractImovel.enums.TiposCliente;
 import ContractImovel.model.Inquilino;
 import ContractImovel.service.inquilinoService;
 
