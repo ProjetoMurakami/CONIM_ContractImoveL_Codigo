@@ -12,9 +12,6 @@ import javax.persistence.Persistence;
 import javax.persistence.PersistenceUnit;
 
 import org.apache.log4j.Logger;
-
-//import org.apache.log4j.Logger;
-
 /**
  * @author murakamiadmin
  *
@@ -36,7 +33,6 @@ public class EntityManagerProducer implements Serializable{
 		this.factory = Persistence.createEntityManagerFactory("testePU");
 	}
 	
-
 	@Produces
 	@RequestScoped
 	public EntityManager create() {		
@@ -58,6 +54,5 @@ public class EntityManagerProducer implements Serializable{
 	
 	public static EntityManagerProducer getInstance() {
         return INSTANCE;
-    }
-	
+    }	
 }

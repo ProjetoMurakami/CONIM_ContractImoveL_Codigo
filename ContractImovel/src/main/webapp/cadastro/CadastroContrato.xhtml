@@ -1,0 +1,168 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="titulo">Cadastro de Contratos de Locação</ui:define>
+
+    <ui:define name="corpo">
+
+        <h:form id="formularioContratoLocacao">
+            <h1>Cadastro de Contratos de Locação</h1>
+
+            <p:growl id="growlContrato" showDetail="false" />
+
+            <p:commandButton icon="pi pi-plus" value="Novo Contrato" id="botaoNovoContrato"
+                             oncomplete="PF('editarContratoDialogWidgetVar').show()"
+                             update="editarContratoDialog"
+                             process="@this" />
+
+            <p:panel header="Contratos de Locação" styleClass="contract-panel" toggleable="false">
+            <p:dataTable id="contratosTable" value="#{contratoLocacaoBean.contratos}" var="c"
+                emptyMessage="Nenhum contrato encontrado" rows="10"
+                style="margin-top:1rem;">
+
+                <p:column headerText="ID">
+                    <h:outputText value="#{c.id}" />
+                </p:column>
+
+                <p:column headerText="Imóvel">
+                    <h:outputText value="#{c.imovel.id}" />
+                </p:column>
+
+                <p:column headerText="Inquilino">
+                    <h:outputText value="#{c.inquilino.nome}" />
+                </p:column>
+
+                <p:column headerText="Valor Aluguel">
+                    <h:outputText value="#{c.valorAluguel}">
+                        <f:convertNumber pattern="R$ #,##0.00" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Data Início">
+                    <h:outputText value="#{c.dataInicio}">
+                        <f:converter converterId="localDateConverter" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Data Fim">
+                    <h:outputText value="#{c.dataFinal}">
+                        <f:converter converterId="localDateConverter" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Ações" style="text-align:center;">
+                    <p:commandButton icon="pi pi-pencil" title="Editar"
+                                    update=":formularioContratoLocacao:editarContratoDialog"
+                                    oncomplete="PF('editarContratoDialogWidgetVar').show()"
+                                    actionListener="#{contratoLocacaoBean.setContrato(c)}" 
+                                    process="@this" />
+                    <p:commandButton icon="pi pi-trash" title="Excluir"
+                                    oncomplete="PF('confirmacaoExclusaoContrato').show()"
+                                    actionListener="#{contratoLocacaoBean.setContrato(c)}" 
+                                    process="@this" />
+                </p:column>
+            </p:dataTable>
+            
+            </p:panel>
+
+            <p:dialog id="editarContratoDialog" widgetVar="editarContratoDialogWidgetVar"
+                      modal="true" header="Editar Contrato" resizable="false" width="850">
+
+                <h:panelGrid columns="2" columnClasses="col-left,col-right"
+                             style="width:100%;" cellpadding="8">
+
+                    <h:panelGroup>
+                        <h:outputLabel for="imovel" value="Imóvel: *" />
+                        <p:selectOneMenu id="imovel"
+                                        value="#{contratoLocacaoBean.contrato.imovel}"
+                                        converter="imovelConverter" style="width:100%" required="true"
+                                        requiredMessage="Imóvel é obrigatório">
+                            <f:selectItem itemLabel="Selecione um imóvel" itemValue="#{null}" />
+                            <f:selectItems value="#{contratoLocacaoBean.imoveisDisponiveis}" var="im"
+                                        itemLabel="Imóvel #{im.id} - #{im.endereco}, #{im.numero}" 
+                                        itemValue="#{im}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="inquilino" value="Inquilino: *" style="margin-top:1rem;" />
+                        <p:selectOneMenu id="inquilino"
+                                        value="#{contratoLocacaoBean.contrato.inquilino}"
+                                        converter="inquilinoConverter" style="width:100%" required="true"
+                                        requiredMessage="Inquilino é obrigatório">
+                            <f:selectItem itemLabel="Selecione um inquilino" itemValue="#{null}" />
+                            <f:selectItems value="#{contratoLocacaoBean.inquilinos}" var="inq"
+                                        itemLabel="#{inq.nome} - #{inq.cpf}" itemValue="#{inq}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="fiador" value="Fiador:" style="margin-top:1rem;" />
+                        <p:selectOneMenu id="fiador"
+                                        value="#{contratoLocacaoBean.contrato.fiador}"
+                                        converter="fiadorConverter" style="width:100%">
+                            <f:selectItem itemLabel="Selecione um fiador" itemValue="#{null}" />
+                            <f:selectItems value="#{contratoLocacaoBean.fiadores}" var="f"
+                                        itemLabel="#{f.nome} - #{f.cpf}" itemValue="#{f}" />
+                        </p:selectOneMenu>
+
+                        <p:button value="Novo Fiador" icon="pi pi-user-plus"
+                            outcome="/cadastro/CadastroFiador.xhtml" />
+                    </h:panelGroup>
+
+                    <h:panelGroup>
+                        <h:outputLabel for="dataInicio" value="Data Início: *" style="margin-top:1rem;" />
+                        <p:calendar id="dataInicio"
+                                    value="#{contratoLocacaoBean.contrato.dataInicio}"
+                                    pattern="dd/MM/yyyy" 
+                                    showOn="button" 
+                                    required="true"
+                                    requiredMessage="Data de início é obrigatória"
+                                    converter="localDateConverter" />
+
+                        <h:outputLabel for="dataFinal" value="Data Final: *" style="margin-top:1rem;" />
+                        <p:calendar id="dataFinal"
+                                    value="#{contratoLocacaoBean.contrato.dataFinal}"
+                                    pattern="dd/MM/yyyy" 
+                                    showOn="button" 
+                                    required="true"
+                                    requiredMessage="Data final é obrigatória"
+                                    converter="localDateConverter" />
+
+                        <h:outputLabel for="valorAluguel" value="Valor do Aluguel: *" style="margin-top:1rem;" />
+                        <p:inputNumber id="valorAluguel"
+                                    value="#{contratoLocacaoBean.contrato.valorAluguel}"
+                                    symbol="R$ " symbolPosition="p" decimalSeparator=","
+                                    thousandSeparator="." minValue="0" required="true"
+                                    requiredMessage="Valor do aluguel é obrigatório" />
+                    </h:panelGroup>
+
+                </h:panelGrid>
+
+                <p:commandButton value="Salvar Contrato" icon="pi pi-save"
+                 action="#{contratoLocacaoBean.salvar}"
+                 update="@form :formularioContratoLocacao:contratosTable :formularioContratoLocacao:pagamentosTable growlContrato"
+                 oncomplete="if (!args.validationFailed) {PF('editarContratoDialogWidgetVar').hide();}"
+                 process="@form"
+                 styleClass="p-mt-3" />
+            </p:dialog>
+
+            <p:confirmDialog id="confirmacaoExclusaoContratoDialog"
+                             widgetVar="confirmacaoExclusaoContrato"
+                             message="Tem certeza que deseja excluir o contrato?"
+                             header="Exclusão de Contrato" severity="alert">
+
+                <p:button icon="pi pi-times" value="Não"
+                          onclick="PF('confirmacaoExclusaoContrato').hide(); return false;"
+                          process="@this" />
+
+                <p:commandButton icon="pi pi-check" value="Sim"
+                                 action="#{contratoLocacaoBean.excluir}"
+                                 update="@form growlContrato"
+                                 oncomplete="PF('confirmacaoExclusaoContrato').hide();"
+                                 process="@this" />
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+
+</ui:composition>
