@@ -2,15 +2,16 @@ package ContractImovel.view;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.PersistenceException;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import lombok.extern.log4j.Log4j;
 import ContractImovel.enums.TiposCliente;
 import ContractImovel.model.Inquilino;
 import ContractImovel.service.inquilinoService;
+import ContractImovel.util.CpfValidator;
 
 @Log4j
 @Getter
@@ -41,16 +43,37 @@ public class inquilinoBean implements  Serializable{
 	}
 	
 	public void salvar() {
-		log.info(inquilino.toString());
-		inquilinoService.salvar(inquilino);
-		
-		FacesContext.getCurrentInstance().
-        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-        		"O inquilino foi cadastrado", 
-        		inquilino.toString()));
-		
-		log.info("Inquilino: " + inquilino.toString());
+		try {
+			String cpfUnformatado = CpfValidator.unformat(inquilino.getCpf());
+			if (!CpfValidator.isValid(cpfUnformatado)) {
+				FacesContext.getCurrentInstance().addMessage(null,
+					new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF inválido",
+						"Informe um CPF válido (11 dígitos)."));
+				return; 
+			}
+
+			inquilino.setCpf(CpfValidator.format(cpfUnformatado));
+
+			inquilinoService.salvar(inquilino); 
+			this.inquilinos = inquilinoService.buscarTodos();
+
+			FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
+					"Inquilino salvo com sucesso."));
+			limpar();
+		} catch (PersistenceException e) {
+			log.error("Erro ao salvar inquilino", e);
+			FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao salvar",
+					"Verifique os dados e o log: " + e.getMessage()));
+		} catch (Exception e) {
+			log.error("Erro inesperado ao salvar inquilino", e);
+			FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
+					"Erro inesperado: " + e.getMessage()));
+		}
 	}
+
 	
 	public void excluir() {
 		try {
@@ -65,8 +88,11 @@ public class inquilinoBean implements  Serializable{
 	}
 		
 	public void limpar() {
-
 		this.inquilino = new Inquilino();
+	}
+
+	public List<TiposCliente> getTiposCliente() {
+		return Arrays.asList(TiposCliente.values());
 	}
 }
 

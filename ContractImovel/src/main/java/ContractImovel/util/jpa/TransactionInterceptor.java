@@ -1,7 +1,6 @@
 package ContractImovel.util.jpa;
 
 import java.io.Serializable;
-
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.Interceptor;
@@ -9,49 +8,36 @@ import javax.interceptor.InvocationContext;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 
-/**
- * @author murakamiadmin
- *
- */
 @Interceptor
 @Transactional
 public class TransactionInterceptor implements Serializable {
 
-	private static final long serialVersionUID = 1L;
+    @Inject
+    private EntityManager manager;
 
-	private @Inject EntityManager manager;
-	
-	@AroundInvoke
-	public Object invoke(InvocationContext context) throws Exception {
-		EntityTransaction transaction = manager.getTransaction();
-		boolean owner = false;
+    @AroundInvoke
+    public Object invoke(InvocationContext context) throws Exception {
+        EntityTransaction trx = manager.getTransaction();
+        boolean criador = false;
 
-		try {
-			if (!transaction.isActive()) {
-				// truque para fazer rollback no que já passou
-				// (senão, um futuro commit, confirmaria até mesmo operações sem transação)
-				transaction.begin();
-				transaction.rollback();
-				
-				// agora sim inicia a transação
-				transaction.begin();
-				
-				owner = true;
-			}
+        try {
+            if (!trx.isActive()) {
+                trx.begin();
+                criador = true;
+            }
 
-			return context.proceed();
-		} catch (Exception e) {
-			e.printStackTrace();
-			if (transaction != null && owner) {
-				transaction.rollback();
-			}
+            Object resultado = context.proceed();
 
-			throw e;
-		} finally {
-			if (transaction != null && transaction.isActive() && owner) {
-				transaction.commit();
-			}
-		}
-	}
-	
+            if (criador) {
+                trx.commit();
+            }
+
+            return resultado;
+        } catch (Exception e) {
+            if (trx != null && trx.isActive()) {
+                trx.rollback();
+            }
+            throw e;
+        }
+    }
 }

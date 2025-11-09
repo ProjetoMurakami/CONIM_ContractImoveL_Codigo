@@ -1,5 +1,4 @@
 package ContractImovel.model;
-import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,20 +7,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import ContractImovel.enums.Role;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import ContractImovel.enums.TiposCliente;
 @Getter
 @Setter
 @ToString(onlyExplicitlyIncluded = true)
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @Entity
-public class Inquilino implements Serializable{
-    private static final long serialVersionUID = 1L;
-
+public class Usuario {
     @EqualsAndHashCode.Include
 	@ToString.Include
 	@Id
@@ -29,12 +26,11 @@ public class Inquilino implements Serializable{
 	private Long id;
 
     private String nome;
-    private String email;
+    private String username;
+    private String senha;
     private String cpf;
-    private String telefone;
-    private double rendaMensal;
-    
-    @Enumerated(EnumType.STRING) 
-    private TiposCliente categoria;
+    private String email;
 
+    @Enumerated(EnumType.STRING) 
+    private Role role;
 }

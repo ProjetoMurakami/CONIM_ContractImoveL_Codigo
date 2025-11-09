@@ -7,36 +7,33 @@ import javax.inject.Inject;
 
 import ContractImovel.model.Pagamento;
 import ContractImovel.model.dao.pagamentoDao;
-
 public class pagamentoService implements Serializable {
-
-    private static final long serialVersionUID = 1L;
     
+    private static final long serialVersionUID = 1L;
     @Inject
     private pagamentoDao pagamentoDao;
-    
-    public List<Pagamento> listarTodos() {
-        return pagamentoDao.buscarTodos();
-    }
-    
-    public Pagamento buscarPorId(Long id) {
-        Pagamento pagamento = pagamentoDao.buscarPeloCodigo(id);
-        if (pagamento == null) {
-            throw new RuntimeException("Pagamento não encontrado com o ID: " + id);
+
+    public void salvar(Pagamento pagamento) {
+        if (pagamento.getContratoLocacao() == null) {
+            throw new IllegalArgumentException("Pagamento precisa estar vinculado a um contrato.");
         }
-        return pagamento;
+        
+        pagamentoDao.salvar(pagamento);
     }
-    
-    public Pagamento salvar(Pagamento pagamento) {
-        return pagamentoDao.salvar(pagamento);
-    }
-    
+
     public void excluir(Pagamento pagamento) {
         pagamentoDao.excluir(pagamento);
     }
+
+    public Pagamento buscarPorId(Long id) {
+        return pagamentoDao.buscarPorId(id);
+    }
     
-    public void excluirPorId(Long id) {
-        Pagamento pagamento = buscarPorId(id);
-        pagamentoDao.excluir(pagamento);
+    public List<Pagamento> buscarPorContrato(Long contratoId) {
+        return pagamentoDao.buscarPorContrato(contratoId);
+    }
+
+    public List<Pagamento> buscarTodos() {
+        return pagamentoDao.buscarTodos();
     }
 }
