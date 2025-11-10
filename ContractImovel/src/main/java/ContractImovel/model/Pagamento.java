@@ -10,6 +10,8 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -37,8 +39,12 @@ public class Pagamento implements Serializable{
     private LocalDate dataPagamento;
     private boolean status;
     
-    @Enumerated(EnumType.STRING) // Salva o valor do enum como texto
+    @Enumerated(EnumType.STRING) 
     private FormasPagamento formaDePagamento;
+
+    @ManyToOne
+    @JoinColumn(name = "contrato_locacao_id")
+    private ContratoLocacao contratoLocacao;
 
     public String getDataPagamentoFormatada() {
         return dataPagamento != null ? dataPagamento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";

@@ -7,11 +7,6 @@ import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
-
-/**
- * @author murakamiadmin
- *
- */
 public class CDIServiceLocator {
 	
 	private static BeanManager getBeanManager() {
@@ -40,5 +35,4 @@ public class CDIServiceLocator {
 
 		return o;
 	}
-
 }

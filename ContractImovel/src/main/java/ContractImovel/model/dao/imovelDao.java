@@ -21,31 +21,33 @@ public class imovelDao implements Serializable{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(imovelDao.class);
 	
-	@Transactional
-	public Imovel salvar(Imovel imovel) throws PersistenceException {
-		
-		LOGGER.info("salvar DAO... imovel = " + imovel);
-		
-		try {
-			return manager.merge(imovel);
-		} catch (PersistenceException e) {
-			e.printStackTrace();
-			throw e;
-		}
-	}
-	
-	@Transactional
-	public void excluir(Imovel imovel) throws PersistenceException {
-
-		try {
-			Imovel i = manager.find(Imovel.class, imovel.getId());
-			manager.remove(i);
-			manager.flush();
-		} catch (PersistenceException e) {
-			e.printStackTrace();
-			throw e;
-		} 
-	}
+	@Transactional 
+    public Imovel salvar(Imovel imovel) throws PersistenceException {
+        LOGGER.info("salvar DAO... imovel = " + imovel);
+        try {
+            Imovel imovelSalvo = manager.merge(imovel);
+            manager.flush(); 
+            return imovelSalvo;
+        } catch (PersistenceException e) {
+            LOGGER.error("Erro ao salvar imóvel", e);
+            throw e;
+        }
+    }
+    
+    @Transactional 
+    public void excluir(Imovel imovel) throws PersistenceException {
+        try {
+			LOGGER.info("Excluir DAO... imovel = " + imovel);
+            Imovel imovelGerenciado = manager.find(Imovel.class, imovel.getId());
+            if (imovelGerenciado != null) {
+                manager.remove(imovelGerenciado);
+                manager.flush();
+            }
+        } catch (PersistenceException e) {
+            LOGGER.error("Erro ao excluir imóvel ID: " + imovel.getId(), e);
+            throw e;
+        }
+    }
 	
 	public Imovel buscarPeloCodigo(Long id) {
 		return manager.find(Imovel.class, id);
@@ -60,4 +62,13 @@ public class imovelDao implements Serializable{
 		
 		return q.getResultList();
 	}	
+
+	@SuppressWarnings("unchecked")
+	public List<Imovel> buscarDisponiveis(){
+		String query="SELECT i FROM Imovel i WHERE i.statusImovel = 'DISPONIVEL'";
+
+		Query q = manager.createQuery(query);
+
+		return q.getResultList();
+	}
 }

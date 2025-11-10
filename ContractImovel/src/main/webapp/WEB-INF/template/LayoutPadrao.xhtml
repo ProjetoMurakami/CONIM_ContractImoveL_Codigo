@@ -1,18 +1,59 @@
-<!-- LayoutPadrao.xhtml (template) — incluir Bootstrap para manter estética -->
+<!-- LayoutPadrao.xhtml -->
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"> <!-- ✅ Adicione esta linha -->
   <h:head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"/>
     <title><ui:insert name="titulo"/></title>
   </h:head>
+
   <h:body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">ContractImovel</a>
-        <!-- resto da navbar --> 
-      </div>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">
+                <h:link outcome="/cadastro/index.xhtml" styleClass="nav-link">
+                    <i class="pi pi-home"></i> ContractImovel
+                </h:link>
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <h:link outcome="/cadastro/CadastroInquilino.xhtml" styleClass="nav-link">
+                            <i class="pi pi-users"></i> Inquilinos
+                        </h:link>
+                    </li>
+                    <li class="nav-item">
+                        <h:link outcome="/cadastro/CadastroImovel.xhtml" styleClass="nav-link">
+                            <i class="pi pi-home"></i> Imóveis
+                        </h:link>
+                    </li>
+                    <li class="nav-item">
+                        <h:link outcome="/cadastro/CadastroContrato.xhtml" styleClass="nav-link">
+                            <i class="pi pi-file"></i> Contratos
+                        </h:link>
+                    </li>
+                    <li class="nav-item">
+                        <h:link outcome="/cadastro/CadastroPagamento.xhtml" styleClass="nav-link">
+                            <i class="pi pi-cash"></i> Pagamentos
+                        </h:link>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </nav>
+
+    <h:form style="float: right; margin-right: 2rem;">
+        <p:commandButton value="Sair" action="#{loginBean.logout}" icon="pi pi-sign-out"
+                         styleClass="ui-button-danger" />
+    </h:form>
 
     <div class="container mt-4">
       <ui:insert name="corpo"/>

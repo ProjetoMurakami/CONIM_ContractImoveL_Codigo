@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+<f:view>
+    <h:head>
+        <title>Cadastro de Fiador</title>
+    </h:head>
+    <h:body>
+        <h:form id="formFiador">
+            <h1>Cadastro de Fiador</h1>
+            
+            <p:growl id="growlFiador" showDetail="true" />
+
+            <p:panel header="Dados do Fiador" style="margin-bottom: 20px;">
+                <h:panelGrid columns="2" cellpadding="5" style="width: 100%;">
+                    <!-- Dados Pessoais -->
+                    <h:outputLabel for="nome" value="Nome: *" />
+                    <p:inputText id="nome" value="#{fiadorBean.fiador.nome}" 
+                                required="true" requiredMessage="Nome é obrigatório"
+                                style="width: 300px;" />
+
+                    <h:outputLabel for="cpf" value="CPF: *" />
+                    <p:inputMask id="cpf" value="#{fiadorBean.fiador.cpf}" 
+                                mask="999.999.999-99" required="true"
+                                requiredMessage="CPF é obrigatório" />
+
+                    <h:outputLabel for="email" value="Email:" />
+                    <p:inputText id="email" value="#{fiadorBean.fiador.email}" 
+                                style="width: 300px;" />
+
+                    <h:outputLabel for="telefone" value="Telefone:" />
+                    <p:inputMask id="telefone" value="#{fiadorBean.fiador.telefone}" 
+                                mask="(99) 99999-9999" />
+
+                    <h:outputLabel for="rendaMensal" value="Renda Mensal:" />
+                    <p:inputNumber id="rendaMensal" value="#{fiadorBean.fiador.rendaMensal}" 
+                                  minFractionDigits="2" decimalSeparator="," 
+                                  thousandSeparator="." style="width: 150px;" />
+
+                    <h:outputLabel for="categoria" value="Categoria:" />
+                    <p:selectOneMenu id="categoria" value="#{fiadorBean.fiador.categoria}" 
+                                   style="width: 200px;">
+                        <f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
+                        <f:selectItems value="#{fiadorBean.tiposCliente}" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
+            </p:panel>
+
+            <p:panel header="Endereço" toggleable="true" collapsed="true">
+                <h:panelGrid columns="2" cellpadding="5">
+                    <h:outputLabel for="cep" value="CEP:" />
+                    <p:inputMask id="cep" value="#{fiadorBean.fiador.CEP}" mask="99999-999" />
+
+                    <h:outputLabel for="endereco" value="Endereço:" />
+                    <p:inputText id="endereco" value="#{fiadorBean.fiador.endereco}" 
+                                style="width: 300px;" />
+                    
+                    <h:outputLabel for="numero" value="Número:" />
+                    <p:inputText id="numero" value="#{fiadorBean.fiador.numero}" 
+                                style="width: 100px;" />
+
+                    <h:outputLabel for="bairro" value="Bairro:" />
+                    <p:inputText id="bairro" value="#{fiadorBean.fiador.bairro}" 
+                                style="width: 200px;" />
+                </h:panelGrid>
+            </p:panel>
+
+            <p:panel header="Observações">
+                <p:inputTextarea id="observacoes" value="#{fiadorBean.fiador.observacoes}" 
+                               rows="3" style="width: 100%" />
+            </p:panel>
+
+            <div style="margin-top: 20px;">
+                <p:commandButton value="Salvar Fiador" icon="pi pi-save" 
+                               action="#{fiadorBean.salvar}"
+                               update="growlFiador" process="@form" />
+                
+                <p:commandButton value="Limpar" icon="pi pi-refresh" 
+                               action="#{fiadorBean.limparFormulario}"
+                               update="formFiador" process="@this"
+                               style="margin-left: 10px;" />
+                
+                <p:button value="Voltar para Contratos" icon="pi pi-arrow-left"
+                         outcome="/cadastro/CadastroContrato.xhtml" 
+                         style="margin-left: 10px;" />
+            </div>
+        </h:form>
+    </h:body>
+</f:view>
+</html>
