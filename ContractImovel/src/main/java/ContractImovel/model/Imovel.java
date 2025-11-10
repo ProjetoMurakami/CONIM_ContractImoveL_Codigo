@@ -37,7 +37,7 @@ public class Imovel implements Serializable{
     private String numero;    
     private Double valorAluguel;
     
-    @Enumerated(EnumType.STRING) // Salva o valor do enum como texto
+    @Enumerated(EnumType.STRING) 
     private StatusImovel statusImovel;
     
     private Integer quartos;

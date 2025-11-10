@@ -29,43 +29,58 @@ public class imovelBean implements  Serializable{
     private static final long serialVersionUID = 1L;
 	
 	@Inject
-	private imovelService manterImovelService;
+	private imovelService imovelService;
 	private Imovel imovel = new Imovel();
 	private List<Imovel> imoveis = new ArrayList<Imovel>();
 	
 	@PostConstruct
 	public void inicializar() {
 		log.debug("init pesquisa"); 
-		this.setImoveis(manterImovelService.buscarTodos());
+		this.setImoveis(imovelService.buscarTodos());
 		limpar();
 	}
 	
 	public void salvar() {
-		log.info(imovel.toString());
-		manterImovelService.salvar(imovel);
-		
-		FacesContext.getCurrentInstance().
-        addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,
-        		"O imovel foi gravado com sucesso!", 
-        		imovel.toString()));
-		
-		log.info("aluno: " + imovel.toString());
+		try {
+			log.info("Salvando imóvel: " + imovel.toString());
+			imovelService.salvar(imovel);
+			
+			this.imoveis = imovelService.buscarTodos();
+			
+			FacesContext.getCurrentInstance().addMessage(null, 
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", 
+					"Imóvel salvo com sucesso!"));
+			
+			if (imovel.getId() == null) {
+				limpar();
+			}
+			
+		} catch (Exception e) {
+			log.error("Erro ao salvar imóvel", e);
+			FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", 
+					"Erro ao salvar imóvel: " + e.getMessage()));
+		}
 	}
-	
+
 	public void excluir() {
 		try {
-			manterImovelService.excluir(imovel);
-			this.imoveis = manterImovelService.buscarTodos();
+			imovelService.excluir(imovel);
+			this.imoveis = imovelService.buscarTodos();
+			
+			FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!",
+					"Imóvel excluído com sucesso!"));
+					
 		} catch (Exception e) {
-			e.printStackTrace();
-			FacesContext.getCurrentInstance().addMessage(null, 
-			new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Ocorreu um problema", null));
+			log.error("Erro ao excluir imóvel", e);
+			FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!",
+					"Erro ao excluir imóvel: " + e.getMessage()));
 		}
 	}
 		
 	public void limpar() {
-
 		this.imovel = new Imovel();
 	}
 
@@ -77,5 +92,4 @@ public class imovelBean implements  Serializable{
 		}
 		return options;
 	}
-
 }

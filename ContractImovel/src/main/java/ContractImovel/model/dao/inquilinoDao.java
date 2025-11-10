@@ -22,17 +22,20 @@ public class inquilinoDao implements Serializable{
     private static final Logger LOGGER = LoggerFactory.getLogger(inquilinoDao.class);
 
     @Transactional
-    public Inquilino salvar(Inquilino inquilino) throws PersistenceException{
-
-        LOGGER.info("salvar DAO... pagamento = " + inquilino);
-
-        try {
-			return manager.merge(inquilino);
+	public Inquilino salvar(Inquilino inquilino) {
+		try {
+			if (inquilino.getId() == null) {
+				manager.persist(inquilino);
+				return inquilino;
+			} else {
+				return manager.merge(inquilino);
+			}
 		} catch (PersistenceException e) {
-			e.printStackTrace();
+			LOGGER.error("Erro no DAO ao salvar Inquilino", e);
 			throw e;
 		}
-    }
+	}
+
 
     @Transactional
     public void excluir(Inquilino inquilino) throws PersistenceException{
