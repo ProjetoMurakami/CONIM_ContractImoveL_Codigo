@@ -40,5 +40,4 @@ public class CDIServiceLocator {
 
 		return o;
 	}
-
 }
