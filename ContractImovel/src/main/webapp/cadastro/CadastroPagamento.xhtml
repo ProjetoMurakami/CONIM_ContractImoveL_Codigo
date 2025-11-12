@@ -1,17 +1,22 @@
 <ui:composition
-  template="/WEB-INF/template/LayoutPadrao.xhtml"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:h="http://xmlns.jcp.org/jsf/html"
-  xmlns:f="http://xmlns.jcp.org/jsf/core"
-  xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-  xmlns:p="http://primefaces.org/ui">
-  
+	template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+
+	<f:metadata>
+    	<f:viewParam name="pagamentoId" value="#{pagamentoBean.pagamento.id}" />
+    	<f:viewParam name="contratoId" value="#{pagamentoBean.contratoId}" />
+    	<f:event type="preRenderView" listener="#{pagamentoBean.onPreRender}" />
+	</f:metadata>
+
   <ui:define name="titulo">Cadastro de Pagamentos</ui:define>
   
   <ui:define name="corpo">
   
 	<h:form id="formulario">
-
 		<h1>Cadastro de Pagamentos</h1>
 
 		<p:growl id="growl" showDetail="false" />
@@ -20,8 +25,7 @@
 				<p:toolbarGroup>
 					<p:commandButton icon="pi pi-plus" value="Novo" id="botaoNovo" 
 						oncomplete="PF('editarDialogWidgetVar').show()"
-		            	update="editarDialog"		            	
-		            	process="@this"/>
+		            	update="editarDialog"	process="@this"/>
 				</p:toolbarGroup>
 			</p:toolbar>
 			
@@ -36,7 +40,8 @@
 				</p:column>	
 
 				<p:column headerText="Data Pagamento" style="width: 120px; text-align: center" sortBy="#{pagamento.dataPagamento}">
-					<h:outputText value="#{pagamento.dataVencimentoFormatada}">
+					<h:outputText value="#{pagamento.dataPagamento}">
+						<f:converter converterId="localDateConverter" />
 					</h:outputText>
 				</p:column>
 
@@ -50,33 +55,32 @@
 					<h:outputText value="#{pagamento.status ? 'Pago' : 'Pendente'}" />
 				</p:column>
 
-				
 				<p:column headerText="Forma" style="width: 120px; text-align: left" filterBy="#{pagamento.formaDePagamento}">
 					<h:outputText value="#{pagamento.formaDePagamento}" />
 				</p:column>
 			
 				<p:column headerText="Vencimento" style="width: 120px; text-align: center" sortBy="#{pagamento.dataVencimento}">
-					<h:outputText value="#{pagamento.dataVencimentoFormatada}">
+					<h:outputText value="#{pagamento.dataVencimento}">
+						<f:converter converterId="localDateConverter" />
 					</h:outputText>
 				</p:column>
 
-				<p:column headerText="Operações" style="width: 80px; text-align: center">					
-					
-					<p:commandButton id="cbEditar" icon="pi pi-pencil" title="Editar"	    				
-		            	oncomplete="PF('editarDialogWidgetVar').show()"
-		            	update=":formulario:editarDialog"		            	
-		            	process="@this">
-		            	<f:setPropertyActionListener target="#{pagamentoBean.pagamento}" 
-							value="#{pagamento}" />
-	            	</p:commandButton>
+				<p:column headerText="Ações" style="width: 150px; text-align: center">					
+				<p:commandButton icon="pi pi-pencil" title="Editar Pagamento"
+					oncomplete="PF('editarDialogWidgetVar').show()"
+					update=":formulario:editarDialog"
+					process="@this" style="margin-right: 5px;">
+					<f:setPropertyActionListener target="#{pagamentoBean.pagamento}" 
+						value="#{pagamento}" />
+				</p:commandButton>
 
-					<p:commandButton icon="pi pi-trash"  title="Excluir"
-						onclick="PF('confirmacaoExclusao').show();"
-						process="@this">
-						<f:setPropertyActionListener target="#{pagamentoBean.pagamento}"
-							value="#{pagamento}" />
-					</p:commandButton>
-				</p:column>
+				<p:commandButton icon="pi pi-trash" title="Excluir Pagamento"
+					onclick="PF('confirmacaoExclusao').show(); return false;"
+					process="@this" style="margin-left: 5px;">
+					<f:setPropertyActionListener target="#{pagamentoBean.pagamento}" 
+						value="#{pagamento}" />
+				</p:commandButton>
+			</p:column>
 
 			</p:dataTable>
 
@@ -96,54 +100,70 @@
 			<p:calendar id="dataPagamento" value="#{pagamentoBean.pagamento.dataPagamento}" 
 				pattern="dd/MM/yyyy" locale="pt_BR" />
 
-			<p:outputLabel for="dataVencimento" value="Data Vencimento: " />
+			<p:outputLabel for="dataVencimento" value="Data Vencimento: *" />
 			<p:calendar id="dataVencimento" value="#{pagamentoBean.pagamento.dataVencimento}" 
-				pattern="dd/MM/yyyy" locale="pt_BR" />
+				pattern="dd/MM/yyyy" locale="pt_BR" required="true"
+				requiredMessage="Data de vencimento é obrigatória" />
 
-			<p:outputLabel for="valor" value="Valor: " />
+			<p:outputLabel for="valor" value="Valor: *" />
 			<p:inputNumber id="valor" value="#{pagamentoBean.pagamento.valor}"
 				symbol="R$ " symbolPosition="p" decimalSeparator=","
-				thousandSeparator="." minValue="0" />
+				thousandSeparator="." minValue="0" required="true"
+				requiredMessage="Valor é obrigatório" />
 
 			<p:outputLabel for="status" value="Status: " />
 			<p:selectOneMenu id="status" value="#{pagamentoBean.pagamento.status}">
-				<f:selectItem itemLabel="Selecione o status" />
+				<f:selectItem itemLabel="Selecione o status" itemValue="#{null}" />
 				<f:selectItem itemLabel="PENDENTE" itemValue="false" />
 				<f:selectItem itemLabel="PAGO" itemValue="true" />
 			</p:selectOneMenu>
 
 			<p:outputLabel for="formaDePagamento" value="Forma Pagamento: " />
 			<p:selectOneMenu id="formaDePagamento" value="#{pagamentoBean.pagamento.formaDePagamento}">
-				<f:selectItems itemLabel="Selecione a forma de pagamento" />
-				<f:selectItems value="#{pagamentoBean.formasPagamento}" var="forma"/>
+				<f:selectItem itemLabel="Selecione a forma de pagamento" itemValue="#{null}" />
+				<f:selectItems value="#{pagamentoBean.formasPagamento}" />
 			</p:selectOneMenu>
 
+			<p:outputLabel for="contrato" value="Contrato Vinculado: *" style="margin-top:1rem;" />
+			<p:selectOneMenu id="contrato" 
+							value="#{pagamentoBean.pagamento.contratoLocacao}" 
+							converter="contratoConverter" style="width: 100%" required="true"
+							requiredMessage="Contrato é obrigatório">
+				<f:selectItem itemLabel="Selecione um contrato" itemValue="#{null}" />
+				<f:selectItems value="#{pagamentoBean.contratos}" var="contrato"
+							itemLabel="Contrato #{contrato.id} - #{contrato.inquilino.nome}" 
+							itemValue="#{contrato}" />
+			</p:selectOneMenu>
 
 			<p:commandButton icon="pi pi-save" id="salvarButton"
 				value="Salvar" title="Gravar dados do pagamento"
-				actionListener="#{pagamentoBean.salvar}"
+				action="#{pagamentoBean.salvar}"
 				oncomplete="if (!args.validationFailed) {PF('editarDialogWidgetVar').hide();}"
-				update="growl pagamentosTable" process="@this grid">
-			</p:commandButton>						
-			
+				update="growl pagamentosTable" 
+				process="@form"/>
+					
+				<p:commandButton value="Cancelar" icon="pi pi-times"
+					onclick="PF('editarDialogWidgetVar').hide();"
+					immediate="true"/>
 		</p:panelGrid>
 
 	</p:dialog>
 	
 	<p:confirmDialog id="confirmacaoExclusaoDialog"
 				widgetVar="confirmacaoExclusao"
-				message="Tem certeza que deseja excluir o pagamento no valor de #{pagamentoBean.pagamento.valor}?"
+				message="Tem certeza que deseja excluir o pagamento?"
 				header="Exclusão de pagamento" severity="alert">
-				<p:button icon="pi pi-thumbs-down" value="Não"
-					onclick="PF('confirmacaoExclusao').hide(); return false;" 
+				
+				<p:commandButton value="Não" icon="pi pi-times"
+					onclick="PF('confirmacaoExclusao').hide();" 
 					process="@this"/>
-				<p:commandButton icon="pi pi-thumbs-up" value="Sim" 
-				    update=":formulario:pagamentosTable"
-					onclick="PF('confirmacaoExclusao').hide();"
+					
+				<p:commandButton value="Sim" icon="pi pi-check" 
 					action="#{pagamentoBean.excluir}"
+					oncomplete="PF('confirmacaoExclusao').hide();"
+					update="growl pagamentosTable"
 					process="@this"/>
 			</p:confirmDialog>	
-
 	</h:form>
   </ui:define>
 </ui:composition>
