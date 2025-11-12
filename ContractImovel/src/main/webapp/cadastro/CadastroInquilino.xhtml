@@ -13,7 +13,6 @@
 
             <p:growl id="growlInquilino" showDetail="false" />
 
-            <!-- Toolbar para Novo -->
             <p:toolbar style="margin-top: 20px">
                 <p:toolbarGroup>
                     <p:commandButton icon="pi pi-plus" value="Novo" id="botaoNovoInquilino"
@@ -22,7 +21,6 @@
                 </p:toolbarGroup>
             </p:toolbar>
 
-            <!-- Tabela de Inquilinos -->
             <p:dataTable id="inquilinosTable" var="inquilino" value="#{inquilinoBean.inquilinos}"
                 lazy="false" showGridlines="true" style="margin-top: 20px"
                 emptyMessage="Nenhum inquilino encontrado." rows="10" paginator="true"
@@ -36,7 +34,7 @@
                     <h:outputText value="#{inquilino.nome}" />
                 </p:column>
 
-                <p:column headerText="CPF" style="width: 120px; text-align: left" filterBy="#{inquilino.cpf}">
+                <p:column headerText="Documento" style="width: 120px; text-align: left" filterBy="#{inquilino.cpf}">
                     <h:outputText value="#{inquilino.cpf}" />
                 </p:column>
 
@@ -61,7 +59,6 @@
 
             </p:dataTable>
 
-            <!-- Dialog para editar/novo inquilino -->
             <p:dialog id="editarInquilinoDialog" header="Inquilino" widgetVar="editarInquilinoDialogWidgetVar"
                 modal="true" resizable="true" closeOnEscape="true" width="600px" position="center top" maximizable="true" height="auto" responsive="true">
 
@@ -73,8 +70,11 @@
                     <p:outputLabel for="nome" value="Nome: " />
                     <p:inputText id="nome" value="#{inquilinoBean.inquilino.nome}" maxlength="100" />
 
-                    <p:outputLabel for="cpf" value="CPF: " />
-                    <p:inputMask id="cpf" value="#{inquilinoBean.inquilino.cpf}" mask="999.999.999-99" />
+                    <h:outputLabel for="cpf" value="CPF:" />
+                    <h:inputText id="cpf" value="#{inquilinoBean.inquilino.cpf}" required="true">
+                    <f:ajax event="blur" render="cpfMsg" />
+                    </h:inputText>
+                    <h:message id="cpfMsg" for="cpf" />
 
                     <p:outputLabel for="telefone" value="Telefone: " />
                     <p:inputMask id="telefone" value="#{inquilinoBean.inquilino.telefone}" mask="(99) 99999-9999" />
@@ -82,13 +82,18 @@
                     <p:outputLabel for="email" value="Email: " />
                     <p:inputText id="email" value="#{inquilinoBean.inquilino.email}" />
 
+                    <h:outputLabel for="tipo" value="Tipo:" />
+                    <p:selectOneMenu id="tipo" value="#{inquilinoBean.inquilino.categoria}">
+                        <f:selectItem itemLabel="Selecione um tipo" itemValue="#{null}" />
+                        <f:selectItems value="#{inquilinoBean.tiposCliente}" />
+                    </p:selectOneMenu>
+
                     <p:commandButton icon="pi pi-save" id="salvarInquilinoButton" value="Salvar"
                         title="Gravar dados do inquilino"
                         actionListener="#{inquilinoBean.salvar}"
                         oncomplete="if (!args.validationFailed) {PF('editarInquilinoDialogWidgetVar').hide();}"
                         update="growlInquilino inquilinosTable" process="@this gridInquilino" />
                 </p:panelGrid>
-
             </p:dialog>
 
    
