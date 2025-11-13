@@ -5,12 +5,10 @@ import ContractImovel.model.dao.imovelDao;
 
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-import java.io.Serializable;
 import java.util.List;
 
-public class imovelService implements Serializable {
+public class imovelService  {
     
-    private static final long serialVersionUID = 1L;
     
     @Inject
     private imovelDao imovelDao;

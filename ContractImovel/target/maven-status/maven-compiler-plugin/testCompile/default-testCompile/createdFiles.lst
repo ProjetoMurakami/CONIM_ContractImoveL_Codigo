@@ -1,0 +1,17 @@
+ContractImovel\util\FacesUtilTest.class
+ContractImovel\model\converter\inquilinoConverterTest.class
+ContractImovel\model\FiadorTest.class
+ContractImovel\model\dao\inquilinoDaoTest.class
+ContractImovel\enums\TiposClienteTest.class
+ContractImovel\enums\StatusImovelTest.class
+ContractImovel\model\dao\contratoLocacaoDaoTest.class
+ContractImovel\model\dao\pagamentoDaoTest.class
+ContractImovel\model\PagamentoTest.class
+ContractImovel\model\dao\imovelDaoTest.class
+ContractImovel\enums\FormasPagamentoTest.class
+ContractImovel\model\ContratoLocacaoTest.class
+ContractImovel\model\InquilinoTest.class
+ContractImovel\model\dao\fiadorDaoTest.class
+ContractImovel\util\CpfValidatorTest.class
+ContractImovel\model\ImovelTest.class
+ContractImovel\util\FacesContextMocker.class

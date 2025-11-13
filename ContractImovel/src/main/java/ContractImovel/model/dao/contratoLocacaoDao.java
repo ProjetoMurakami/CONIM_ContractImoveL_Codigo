@@ -22,12 +22,14 @@ public class contratoLocacaoDao implements Serializable{
     private static final Logger LOGGER = LoggerFactory.getLogger(contratoLocacaoDao.class);
 
     @Transactional
-    public ContratoLocacao salvar(ContratoLocacao contratoLocacao) throws PersistenceException {
-
-        LOGGER.info("Salvar DAO... Contrato = " + contratoLocacao);
-
+    public ContratoLocacao salvar(ContratoLocacao contrato) {
         try {
-            return manager.merge(contratoLocacao);
+            if (contrato.getId() == null) {
+                manager.persist(contrato);
+                return contrato;
+            } else {
+                return manager.merge(contrato);
+            }
         } catch (PersistenceException e) {
             e.printStackTrace();
             throw e;
@@ -35,13 +37,14 @@ public class contratoLocacaoDao implements Serializable{
     }
 
     @Transactional
-    public void excluir(ContratoLocacao contratoLocacao) throws PersistenceException {
-        
-        try{
-            ContratoLocacao c = manager.find(ContratoLocacao.class, contratoLocacao.getId());
-            manager.remove(c);
-            manager.flush();
-        } catch (PersistenceException e){
+    public void excluir(ContratoLocacao contrato) throws PersistenceException {
+        try {
+            ContratoLocacao cont = manager.find(ContratoLocacao.class, contrato.getId());
+            if (cont != null) {
+                manager.remove(cont);
+                manager.flush();
+            }
+        } catch (PersistenceException e) {
             e.printStackTrace();
             throw e;
         }

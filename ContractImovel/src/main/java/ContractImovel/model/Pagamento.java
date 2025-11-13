@@ -22,7 +22,7 @@ import ContractImovel.enums.FormasPagamento;
 
 @Getter
 @Setter
-@ToString(onlyExplicitlyIncluded = true)
+@ToString
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @Entity
 public class Pagamento implements Serializable{

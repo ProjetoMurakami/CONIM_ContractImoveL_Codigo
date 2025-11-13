@@ -21,7 +21,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(onlyExplicitlyIncluded= true)
+@ToString
 @EqualsAndHashCode(callSuper= false, onlyExplicitlyIncluded= true)
 @Entity
 public class ContratoLocacao implements Serializable{
@@ -55,5 +55,6 @@ public class ContratoLocacao implements Serializable{
     
     @OneToMany(mappedBy = "contratoLocacao", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Pagamento> pagamentos;
+
     
 }

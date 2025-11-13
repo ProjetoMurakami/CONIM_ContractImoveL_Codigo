@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.2"
+             xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+             http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
+
+    <persistence-unit name="test-persistence-unit" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        
+        <class>ContractImovel.model.Imovel</class>
+        <class>ContractImovel.model.Inquilino</class>
+        <class>ContractImovel.model.Pagamento</class>
+        <class>ContractImovel.model.ContratoLocacao</class>
+        <class>ContractImovel.model.Fiador</class>
+        <class>ContractImovel.model.Usuario</class>
+
+        <properties>
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/locacao"/>
+            <property name="javax.persistence.jdbc.user" value="developer"/>
+            <property name="javax.persistence.jdbc.password" value="ifspifsp"/>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
+            
+            <!-- CORREÇÃO: Dialeto correto para MySQL -->
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL8Dialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+            
+            <!-- NOVO: Configurações para evitar locks -->
+            <property name="hibernate.jdbc.timeout" value="30"/>
+            <property name="hibernate.lock.timeout" value="10000"/>
+            <property name="hibernate.c3p0.timeout" value="300"/>
+            
+            <!-- NOVO: Configurações de pool de conexões -->
+            <property name="hibernate.c3p0.max_size" value="20"/>
+            <property name="hibernate.c3p0.min_size" value="5"/>
+            <property name="hibernate.c3p0.acquire_increment" value="2"/>
+            <property name="hibernate.c3p0.idle_test_period" value="300"/>
+            <property name="hibernate.c3p0.max_statements" value="50"/>
+            <property name="hibernate.c3p0.preferredTestQuery" value="SELECT 1"/>
+        </properties>
+    </persistence-unit>
+</persistence>

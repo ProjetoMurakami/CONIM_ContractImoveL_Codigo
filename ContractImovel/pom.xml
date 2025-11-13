@@ -13,6 +13,9 @@
   <maven.compiler.source>21</maven.compiler.source>
   <maven.compiler.target>21</maven.compiler.target>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  <mockito.version>5.12.0</mockito.version>
+    <junit.version>5.10.2</junit.version>
+    <byte-buddy.version>1.14.13</byte-buddy.version>
   </properties>
   <build>
     <finalName>ContractImovel</finalName>
@@ -27,6 +30,20 @@
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.10.1</version>
         </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.2.5</version>
+          <configuration>
+              <argLine>
+                  -Dnet.bytebuddy.experimental=true
+                  --add-opens java.base/java.lang=ALL-UNNAMED
+                  --add-opens java.base/java.util=ALL-UNNAMED
+                  -Xmx512m
+              </argLine>
+              <useSystemClassLoader>false</useSystemClassLoader>
+          </configuration>
+      </plugin>
         <plugin>
           <artifactId>maven-resources-plugin</artifactId>
           <version>3.1.0</version>
@@ -125,6 +142,51 @@
       <groupId>com.mysql</groupId>
       <artifactId>mysql-connector-j</artifactId>
       <version>9.2.0</version>
+    </dependency>
+    <!-- TESTES: JUnit 5 -->
+    <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- TESTES: Mockito -->
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-core</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <dependency>
+        <groupId>org.mockito</groupId>
+        <artifactId>mockito-junit-jupiter</artifactId>
+        <version>${mockito.version}</version>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- TESTES: Byte Buddy (necessário para Mockito no Java 21) -->
+    <dependency>
+        <groupId>net.bytebuddy</groupId>
+        <artifactId>byte-buddy</artifactId>
+        <version>${byte-buddy.version}</version>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- TESTES: H2 Database (banco em memória para testes) -->
+    <dependency>
+        <groupId>com.h2database</groupId>
+        <artifactId>h2</artifactId>
+        <version>2.2.224</version>
+        <scope>test</scope>
+    </dependency>
+
+    <!-- TESTES: SLF4J Simple (logging para testes) -->
+    <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-simple</artifactId>
+        <version>1.7.36</version>
+        <scope>test</scope>
     </dependency>
   </dependencies>
   <repositories>

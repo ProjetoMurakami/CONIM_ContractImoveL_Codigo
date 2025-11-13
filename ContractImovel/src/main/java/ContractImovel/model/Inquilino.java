@@ -16,7 +16,7 @@ import lombok.ToString;
 import ContractImovel.enums.TiposCliente;
 @Getter
 @Setter
-@ToString(onlyExplicitlyIncluded = true)
+@ToString
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @Entity
 public class Inquilino implements Serializable{

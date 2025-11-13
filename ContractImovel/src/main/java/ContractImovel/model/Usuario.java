@@ -15,7 +15,7 @@ import lombok.ToString;
 
 @Getter
 @Setter
-@ToString(onlyExplicitlyIncluded = true)
+@ToString
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @Entity
 public class Usuario {
@@ -33,4 +33,5 @@ public class Usuario {
 
     @Enumerated(EnumType.STRING) 
     private Role role;
+
 }
