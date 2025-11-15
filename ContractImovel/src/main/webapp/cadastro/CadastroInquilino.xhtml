@@ -34,8 +34,8 @@
                     <h:outputText value="#{inquilino.nome}" />
                 </p:column>
 
-                <p:column headerText="Documento" style="width: 120px; text-align: left" filterBy="#{inquilino.cpf}">
-                    <h:outputText value="#{inquilino.cpf}" />
+                <p:column headerText="Documento" style="width: 120px; text-align: left" filterBy="#{inquilino.documento}">
+                    <h:outputText value="#{inquilino.documento}" />
                 </p:column>
 
                 <p:column headerText="Telefone" style="width: 120px; text-align: left" filterBy="#{inquilino.telefone}">
@@ -68,13 +68,13 @@
                     <p:outputLabel id="idNovo" value="Novo" rendered="#{inquilinoBean.inquilino.id == null}" />
 
                     <p:outputLabel for="nome" value="Nome: " />
-                    <p:inputText id="nome" value="#{inquilinoBean.inquilino.nome}" maxlength="100" />
+                    <p:inputText id="nome" value="#{inquilinoBean.inquilino.nome}" maxlength="100" 
+                                 requiredMessage="Nome é obrigatório" required="true" />
 
-                    <h:outputLabel for="cpf" value="CPF:" />
-                    <h:inputText id="cpf" value="#{inquilinoBean.inquilino.cpf}" required="true">
-                    <f:ajax event="blur" render="cpfMsg" />
+                    <h:outputLabel for="documento" value="Documento:" />
+                    <h:inputText id="documento" value="#{inquilinoBean.inquilino.documento}" required="true">
+                    <f:ajax event="blur" render="documentoMSG" />
                     </h:inputText>
-                    <h:message id="cpfMsg" for="cpf" />
 
                     <p:outputLabel for="telefone" value="Telefone: " />
                     <p:inputMask id="telefone" value="#{inquilinoBean.inquilino.telefone}" mask="(99) 99999-9999" />
@@ -83,7 +83,7 @@
                     <p:inputText id="email" value="#{inquilinoBean.inquilino.email}" />
 
                     <h:outputLabel for="tipo" value="Tipo:" />
-                    <p:selectOneMenu id="tipo" value="#{inquilinoBean.inquilino.categoria}">
+                    <p:selectOneMenu id="tipo" value="#{inquilinoBean.inquilino.categoria}" required="true">
                         <f:selectItem itemLabel="Selecione um tipo" itemValue="#{null}" />
                         <f:selectItems value="#{inquilinoBean.tiposCliente}" />
                     </p:selectOneMenu>

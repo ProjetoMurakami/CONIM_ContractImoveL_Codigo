@@ -61,24 +61,4 @@ public class contratoLocacaoDao implements Serializable{
         Query q = manager.createQuery(query);
         return q.getResultList();
     }
-
-    @Transactional
-    public ContratoLocacao buscarPorIdComPagamentos(Long id) {
-        LOGGER.info("Buscando contrato com pagamentos, id = {}", id);
-        try {
-            return manager.createQuery(
-                "SELECT c FROM ContratoLocacao c " +
-                "LEFT JOIN FETCH c.pagamentos " +
-                "LEFT JOIN FETCH c.imovel " +
-                "LEFT JOIN FETCH c.inquilino " +
-                "LEFT JOIN FETCH c.fiador " +
-                "WHERE c.id = :id", ContratoLocacao.class)
-                .setParameter("id", id)
-                .getSingleResult();
-        } catch (Exception e) {
-            LOGGER.error("Erro ao buscar contrato com pagamentos", e);
-            return null;
-        }
-    }
-
 }

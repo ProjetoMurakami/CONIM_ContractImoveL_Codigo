@@ -36,12 +36,12 @@ public class Imovel implements Serializable{
     private String endereco;
     private String numero;    
     private Double valorAluguel;
-    
-    @Enumerated(EnumType.STRING) 
-    private StatusImovel statusImovel;
-    
     private Integer quartos;
     private Integer banheiros;
     private Double area;
     private String observacoes;
+
+    @Enumerated(EnumType.STRING) 
+    private StatusImovel statusImovel;
+    
 }

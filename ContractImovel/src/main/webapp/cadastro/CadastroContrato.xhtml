@@ -94,7 +94,7 @@
                                         requiredMessage="Inquilino é obrigatório">
                             <f:selectItem itemLabel="Selecione um inquilino" itemValue="#{null}" />
                             <f:selectItems value="#{contratoLocacaoBean.inquilinos}" var="inq"
-                                        itemLabel="#{inq.nome} - #{inq.cpf}" itemValue="#{inq}" />
+                                        itemLabel="#{inq.nome} - #{inq.documento}" itemValue="#{inq}" />
                         </p:selectOneMenu>
 
                         <h:outputLabel for="fiador" value="Fiador:" style="margin-top:1rem;" />
@@ -103,7 +103,7 @@
                                         converter="fiadorConverter" style="width:100%">
                             <f:selectItem itemLabel="Selecione um fiador" itemValue="#{null}" />
                             <f:selectItems value="#{contratoLocacaoBean.fiadores}" var="f"
-                                        itemLabel="#{f.nome} - #{f.cpf}" itemValue="#{f}" />
+                                        itemLabel="#{f.nome} - #{f.documento}" itemValue="#{f}" />
                         </p:selectOneMenu>
 
                         <p:button value="Novo Fiador" icon="pi pi-user-plus"

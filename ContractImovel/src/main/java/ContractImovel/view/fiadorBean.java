@@ -38,13 +38,13 @@ public class fiadorBean implements Serializable {
 
     public void salvar() {
     try {
-            if (fiador.getCpf() != null && !fiador.getCpf().isEmpty()) {
-                String cpfLimpo = CpfValidator.unformat(fiador.getCpf());
+            if (fiador.getDocumento() != null && !fiador.getDocumento().isEmpty()) {
+                String cpfLimpo = CpfValidator.unformat(fiador.getDocumento());
                 if (!CpfValidator.isValid(cpfLimpo)) {
                     FacesUtil.addErrorMessage("CPF inválido!");
                     return;
                 }
-                fiador.setCpf(cpfLimpo); 
+                fiador.setDocumento(cpfLimpo);
             }
             
             fiadorService.salvar(fiador);

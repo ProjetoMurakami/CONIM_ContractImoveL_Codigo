@@ -31,10 +31,7 @@ public class contratoLocacaoService implements Serializable{
         if (contrato == null){
             throw new RuntimeException("Contrato não encontrado com o ID: " + contratoId);
         }
-        return contratoLocacaoDao.buscarPorIdComPagamentos(contratoId);
+        return contratoLocacaoDao.buscarPeloCodigo(contratoId);
     }
 
-    public ContratoLocacao buscarPorIdComPagamentos(Long contratoId) {
-        return contratoLocacaoDao.buscarPorIdComPagamentos(contratoId);
-    }
 }

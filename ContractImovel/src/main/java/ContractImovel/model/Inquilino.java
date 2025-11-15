@@ -30,7 +30,7 @@ public class Inquilino implements Serializable{
 
     private String nome;
     private String email;
-    private String cpf;
+    private String documento;
     private String telefone;
     private double rendaMensal;
     
