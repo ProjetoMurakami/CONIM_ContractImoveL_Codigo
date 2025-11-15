@@ -26,6 +26,8 @@ public class contratoLocacaoService implements Serializable{
         return contratoLocacaoDao.buscarTodos();
     }
 
+    
+
     public ContratoLocacao buscarPorId(Long contratoId) {
         ContratoLocacao contrato = contratoLocacaoDao.buscarPeloCodigo(contratoId);
         if (contrato == null){

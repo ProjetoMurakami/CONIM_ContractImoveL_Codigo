@@ -4,7 +4,7 @@ import ContractImovel.model.Pagamento;
 import ContractImovel.util.jpa.Transactional;
 
 import javax.inject.Inject;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
@@ -55,19 +55,24 @@ public class pagamentoDao implements Serializable{
         return manager.find(Pagamento.class, id);
     }
     
-    @SuppressWarnings("unchecked")
     public List<Pagamento> buscarPorContrato(Long contratoId) {
-        return manager.createQuery("FROM Pagamento p WHERE p.contratoLocacao.id = :contratoId ORDER BY p.dataVencimento")
-                     .setParameter("contratoId", contratoId)
-                     .getResultList();
+        try {
+            TypedQuery<Pagamento> query = manager.createQuery(
+                // ✅ CORREÇÃO: Use contratoLocacao (nome do atributo Java)
+                "SELECT p FROM Pagamento p WHERE p.contratoLocacao.id = :contratoId ORDER BY p.dataVencimento", 
+                Pagamento.class
+            );
+            query.setParameter("contratoId", contratoId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOGGER.error("Erro ao buscar pagamentos do contrato: " + contratoId, e);
+            return List.of();
+        }
     }
-
     @SuppressWarnings("unchecked")
     public List<Pagamento> buscarTodos() {
-        String query ="select p from Pagamento p";
-
-        Query q = manager.createQuery(query);
-
-        return q.getResultList();
+        return manager.createQuery("FROM Pagamento p ORDER BY p.dataVencimento DESC")
+                    .getResultList();
     }
+    
 }

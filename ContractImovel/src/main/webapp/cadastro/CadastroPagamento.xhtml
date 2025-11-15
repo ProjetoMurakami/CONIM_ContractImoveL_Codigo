@@ -100,12 +100,12 @@
 			<p:calendar id="dataPagamento" value="#{pagamentoBean.pagamento.dataPagamento}" 
 				pattern="dd/MM/yyyy" locale="pt_BR" />
 
-			<p:outputLabel for="dataVencimento" value="Data Vencimento: *" />
+			<p:outputLabel for="dataVencimento" value="Data Vencimento: " />
 			<p:calendar id="dataVencimento" value="#{pagamentoBean.pagamento.dataVencimento}" 
 				pattern="dd/MM/yyyy" locale="pt_BR" required="true"
 				requiredMessage="Data de vencimento é obrigatória" />
 
-			<p:outputLabel for="valor" value="Valor: *" />
+			<p:outputLabel for="valor" value="Valor: " />
 			<p:inputNumber id="valor" value="#{pagamentoBean.pagamento.valor}"
 				symbol="R$ " symbolPosition="p" decimalSeparator=","
 				thousandSeparator="." minValue="0" required="true"
@@ -124,7 +124,7 @@
 				<f:selectItems value="#{pagamentoBean.formasPagamento}" />
 			</p:selectOneMenu>
 
-			<p:outputLabel for="contrato" value="Contrato Vinculado: *" style="margin-top:1rem;" />
+			<p:outputLabel for="contrato" value="Contrato Vinculado: " style="margin-top:1rem;" />
 			<p:selectOneMenu id="contrato" 
 							value="#{pagamentoBean.pagamento.contratoLocacao}" 
 							converter="contratoConverter" style="width: 100%" required="true"

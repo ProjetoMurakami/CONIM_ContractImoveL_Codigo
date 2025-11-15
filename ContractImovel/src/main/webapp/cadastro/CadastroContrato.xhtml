@@ -145,6 +145,51 @@
                  oncomplete="if (!args.validationFailed) {PF('editarContratoDialogWidgetVar').hide();}"
                  process="@form"
                  styleClass="p-mt-3" />
+
+                <p:separator />
+                <p:outputLabel value="Pagamentos do Contrato" style="font-weight: bold; font-size: 16px;"/>
+
+                <p:dataTable id="pagamentosTable" 
+                            value="#{contratoLocacaoBean.pagamentosDoContrato}" 
+                            var="pagamento"
+                            emptyMessage="Nenhum pagamento encontrado para este contrato"
+                            style="margin-top: 15px; margin-bottom: 20px;"
+                            rows="5"
+                            paginator="true"
+                            paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            rowsPerPageTemplate="5,10,15">
+
+                    <p:column headerText="ID" style="width: 60px; text-align: center">
+                        <h:outputText value="#{pagamento.id}" />
+                    </p:column>
+
+                    <p:column headerText="Valor" style="width: 120px; text-align: right">
+                        <h:outputText value="#{pagamento.valor}">
+                            <f:convertNumber pattern="R$ #,##0.00" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Data Vencimento" style="width: 140px; text-align: center">
+                        <h:outputText value="#{pagamento.dataVencimento}">
+                            <f:converter converterId="localDateConverter" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Data Pagamento" style="width: 140px; text-align: center">
+                        <h:outputText value="#{pagamento.dataPagamento}">
+                            <f:converter converterId="localDateConverter" />
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Status" style="width: 100px; text-align: center">
+                        <p:tag value="#{pagamento.status ? 'Pago' : 'Pendente'}" 
+                            severity="#{pagamento.status ? 'success' : 'warning'}" />
+                    </p:column>
+
+                    <p:column headerText="Forma Pagamento" style="width: 130px; text-align: center">
+                        <h:outputText value="#{pagamento.formaDePagamento}" />
+                    </p:column>
+                </p:dataTable>
             </p:dialog>
 
             <p:confirmDialog id="confirmacaoExclusaoContratoDialog"
