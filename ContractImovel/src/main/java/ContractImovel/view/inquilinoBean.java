@@ -44,7 +44,7 @@ public class inquilinoBean implements  Serializable{
 	
 	public void salvar() {
 		try {
-			String cpfUnformatado = CpfValidator.unformat(inquilino.getCpf());
+			String cpfUnformatado = CpfValidator.unformat(inquilino.getDocumento());
 			if (!CpfValidator.isValid(cpfUnformatado)) {
 				FacesContext.getCurrentInstance().addMessage(null,
 					new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF inválido",
@@ -52,7 +52,7 @@ public class inquilinoBean implements  Serializable{
 				return; 
 			}
 
-			inquilino.setCpf(CpfValidator.format(cpfUnformatado));
+			inquilino.setDocumento(CpfValidator.format(cpfUnformatado));
 
 			inquilinoService.salvar(inquilino); 
 			this.inquilinos = inquilinoService.buscarTodos();

@@ -23,10 +23,10 @@
                                 required="true" requiredMessage="Nome é obrigatório"
                                 style="width: 300px;" />
 
-                    <h:outputLabel for="cpf" value="CPF: *" />
-                    <p:inputMask id="cpf" value="#{fiadorBean.fiador.cpf}" 
+                    <h:outputLabel for="documento" value="Documento: " />
+                    <p:inputMask id="documento" value="#{fiadorBean.fiador.documento}" 
                                 mask="999.999.999-99" required="true"
-                                requiredMessage="CPF é obrigatório" />
+                                requiredMessage="Documento é obrigatório" />
 
                     <h:outputLabel for="email" value="Email:" />
                     <p:inputText id="email" value="#{fiadorBean.fiador.email}" 

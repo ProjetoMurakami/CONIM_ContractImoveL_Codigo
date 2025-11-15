@@ -107,14 +107,12 @@ public class contratoLocacaoBean implements Serializable{
     public void setContrato(ContratoLocacao contrato) {
     try {
         if (contrato != null && contrato.getId() != null) {
-            this.contrato = contratoLocacaoService.buscarPorIdComPagamentos(contrato.getId());
-            System.out.println("Contrato carregado com " + 
-                (this.contrato.getPagamentos() != null ? this.contrato.getPagamentos().size() : 0) + " pagamentos");
+            this.contrato = contratoLocacaoService.buscarPorId(contrato.getId());
         } else {
             this.contrato = contrato;
         }
     } catch (Exception e) {
-        log.error("Erro ao carregar contrato com pagamentos", e);
+        log.error("Erro ao carregar contrato", e);
         FacesContext.getCurrentInstance().addMessage(null,
             new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", 
                 "Erro ao carregar contrato: " + e.getMessage()));

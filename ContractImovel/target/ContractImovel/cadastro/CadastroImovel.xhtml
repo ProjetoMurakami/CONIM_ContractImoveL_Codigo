@@ -98,66 +98,66 @@
 			</p:dataTable>
 
 	<p:dialog id="editarDialog" header="Imóvel" widgetVar="editarDialogWidgetVar"
-				modal="true" resizable="true" closeOnEscape="true"
-				showEffect="explode" hideEffect="explode" 
-				width="600px" position="center top" maximizable="true"
-				height="auto" responsive="true">
+          modal="true" resizable="true" closeOnEscape="true"
+          showEffect="explode" hideEffect="explode" 
+          width="800px" position="center" maximizable="true"
+          height="auto" dynamic="true" responsive="true"
+          styleClass="dialog-scrollable">
+		<p:outputPanel style="display: block; max-height: 70vh; overflow-y: auto;">
+			<p:panelGrid id="grid" columns="2" style="width: 100%">
 
-		<p:panelGrid id="grid" columns="2" style="width: 100%">
+				<p:outputLabel for="id" value="ID: " />
+				<p:outputLabel id="id" value="#{imovelBean.imovel.id}" rendered="#{imovelBean.imovel.id != null}" />
+				<p:outputLabel id="idNovo" value="Novo" rendered="#{imovelBean.imovel.id == null}" />
+				
+				<p:outputLabel for="cep" value="CEP: " />
+				<p:inputText id="cep" value="#{imovelBean.imovel.CEP}" maxlength="9" required="true" />
 
-			<p:outputLabel for="id" value="ID: " />
-			<p:outputLabel id="id" value="#{imovelBean.imovel.id}" rendered="#{imovelBean.imovel.id != null}" />
-			<p:outputLabel id="idNovo" value="Novo" rendered="#{imovelBean.imovel.id == null}" />
-			
-			<p:outputLabel for="cep" value="CEP: " />
-			<p:inputText id="cep" value="#{imovelBean.imovel.CEP}" maxlength="9" />
+				<p:outputLabel for="cidade" value="Cidade: " />
+				<p:inputText id="cidade" value="#{imovelBean.imovel.cidade}" required="true"/>
 
-			<p:outputLabel for="cidade" value="Cidade: " />
-			<p:inputText id="cidade" value="#{imovelBean.imovel.cidade}"/>
+				<p:outputLabel for="bairro" value="Bairro: " />
+				<p:inputText id="bairro" value="#{imovelBean.imovel.bairro}" required="true" />
 
-			<p:outputLabel for="bairro" value="Bairro: " />
-			<p:inputText id="bairro" value="#{imovelBean.imovel.bairro}" />
+				<p:outputLabel for="endereco" value="Endereço: " />
+				<p:inputText id="endereco" value="#{imovelBean.imovel.endereco}" required="true" />
 
-			<p:outputLabel for="endereco" value="Endereço: " />
-			<p:inputText id="endereco" value="#{imovelBean.imovel.endereco}" />
+				<p:outputLabel for="numero" value="Número: " />
+				<p:inputText id="numero" value="#{imovelBean.imovel.numero}" />
 
-			<p:outputLabel for="numero" value="Número: " />
-			<p:inputText id="numero" value="#{imovelBean.imovel.numero}" />
+				<p:outputLabel for="quartos" value="Quartos: " />
+				<p:spinner id="quartos" value="#{imovelBean.imovel.quartos}" min="0" />
 
-			<p:outputLabel for="quartos" value="Quartos: " />
-			<p:spinner id="quartos" value="#{imovelBean.imovel.quartos}" min="0" />
+				<p:outputLabel for="banheiros" value="Banheiros: " />
+				<p:spinner id="banheiros" value="#{imovelBean.imovel.banheiros}" min="0" />
 
-			<p:outputLabel for="banheiros" value="Banheiros: " />
-			<p:spinner id="banheiros" value="#{imovelBean.imovel.banheiros}" min="0" />
+				<p:outputLabel for="area" value="Área (m²): " />
+				<p:inputNumber id="area" value="#{imovelBean.imovel.area}" decimalSeparator=","
+					thousandSeparator="." minValue="0" />
 
-			<p:outputLabel for="area" value="Área (m²): " />
-			<p:inputNumber id="area" value="#{imovelBean.imovel.area}" decimalSeparator=","
-				thousandSeparator="." minValue="0" />
+				<p:outputLabel for="valorAluguel" value="Valor Aluguel: " />
+				<p:inputNumber id="valorAluguel" value="#{imovelBean.imovel.valorAluguel}"
+					symbol="R$ " symbolPosition="p" decimalSeparator=","
+					thousandSeparator="." minValue="0" required="true"/>
 
-			<p:outputLabel for="valorAluguel" value="Valor Aluguel: " />
-			<p:inputNumber id="valorAluguel" value="#{imovelBean.imovel.valorAluguel}"
-				symbol="R$ " symbolPosition="p" decimalSeparator=","
-				thousandSeparator="." minValue="0" />
+				<p:outputLabel for="statusImovel" value="Status: " />
+				<p:selectOneMenu id="statusImovel" value="#{imovelBean.imovel.statusImovel}">
+					<f:selectItem itemLabel="Selecione o status" />
+					<f:selectItems value="#{imovelBean.statusImovelOptions}" />
+				</p:selectOneMenu>
 
-			<p:outputLabel for="statusImovel" value="Status: " />
-	 		<p:selectOneMenu id="statusImovel" value="#{imovelBean.imovel.statusImovel}">
-				<f:selectItem itemLabel="Selecione o status" />
-				<f:selectItems value="#{imovelBean.statusImovelOptions}" />
-			</p:selectOneMenu>
+				<p:outputLabel for="observacoes" value="Observações: " />
+				<p:inputTextarea id="observacoes" value="#{imovelBean.imovel.observacoes}" 
+					rows="3" cols="30" autoResize="true" />
 
-			<p:outputLabel for="observacoes" value="Observações: " />
-			<p:inputTextarea id="observacoes" value="#{imovelBean.imovel.observacoes}" 
-				rows="3" cols="30" autoResize="true" />
-
-			<p:commandButton icon="pi pi-save" id="salvarButton"
-				value="Salvar" title="Gravar dados do imóvel"
-				actionListener="#{imovelBean.salvar}"
-				oncomplete="if (!args.validationFailed) {PF('editarDialogWidgetVar').hide();}"
-				update="growl imoveisTable" process="@this grid">
-			</p:commandButton>						
-			
-		</p:panelGrid>
-
+				<p:commandButton icon="pi pi-save" id="salvarButton"
+					value="Salvar" title="Gravar dados do imóvel"
+					actionListener="#{imovelBean.salvar}"
+					oncomplete="if (!args.validationFailed) {PF('editarDialogWidgetVar').hide();}"
+					update="growl imoveisTable" process="@this grid">
+				</p:commandButton>						
+			</p:panelGrid>
+		</p:outputPanel>
 	</p:dialog>
 	
 	<p:confirmDialog id="confirmacaoExclusaoDialog"
