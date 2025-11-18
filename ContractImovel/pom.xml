@@ -121,6 +121,32 @@
       <artifactId>hibernate-validator</artifactId>
       <version>6.2.0.Final</version>
     </dependency>
+   <!-- Jersey JAX-RS (javax.ws.rs compatível com Tomcat 9) -->
+    <dependency>
+    <groupId>org.glassfish.jersey.core</groupId>
+    <artifactId>jersey-server</artifactId>
+    <version>2.41</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.glassfish.jersey.containers</groupId>
+        <artifactId>jersey-container-servlet</artifactId>
+        <version>2.41</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.glassfish.jersey.media</groupId>
+        <artifactId>jersey-media-json-binding</artifactId>
+        <version>2.41</version>
+    </dependency>
+
+    <dependency>
+        <groupId>org.glassfish.jersey.inject</groupId>
+        <artifactId>jersey-hk2</artifactId>
+        <version>2.41</version>
+    </dependency>
+
+
     <dependency>
       <groupId>com.mysql</groupId>
       <artifactId>mysql-connector-j</artifactId>
