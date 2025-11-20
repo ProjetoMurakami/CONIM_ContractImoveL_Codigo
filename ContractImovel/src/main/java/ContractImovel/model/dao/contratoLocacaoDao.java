@@ -3,62 +3,104 @@ package ContractImovel.model.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
+import ContractImovel.model.ContratoLocacao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ContractImovel.model.ContratoLocacao;
-import ContractImovel.util.jpa.Transactional;
-
-public class contratoLocacaoDao implements Serializable{
+public class contratoLocacaoDao implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Inject
-    private EntityManager manager;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(contratoLocacaoDao.class);
 
-    @Transactional
-    public ContratoLocacao salvar(ContratoLocacao contratoLocacao) throws PersistenceException {
+    private static final EntityManagerFactory factory =
+            Persistence.createEntityManagerFactory("testePU");
 
+    private EntityManager getEntityManager() {
+        return factory.createEntityManager();
+    }
+
+    // ------------------------------
+    // SALVAR
+    // ------------------------------
+    public ContratoLocacao salvar(ContratoLocacao contratoLocacao) {
         LOGGER.info("Salvar DAO... Contrato = " + contratoLocacao);
 
+        EntityManager em = getEntityManager();
         try {
-            return manager.merge(contratoLocacao);
-        } catch (PersistenceException e) {
-            e.printStackTrace();
+            em.getTransaction().begin();
+            ContratoLocacao salvo = em.merge(contratoLocacao);
+            em.getTransaction().commit();
+            return salvo;
+
+        } catch (Exception e) {
+            LOGGER.error("Erro ao salvar contrato", e);
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
             throw e;
+
+        } finally {
+            em.close();
         }
     }
 
-    @Transactional
-    public void excluir(ContratoLocacao contratoLocacao) throws PersistenceException {
-        
-        try{
-            ContratoLocacao c = manager.find(ContratoLocacao.class, contratoLocacao.getId());
-            manager.remove(c);
-            manager.flush();
-        } catch (PersistenceException e){
-            e.printStackTrace();
+    // ------------------------------
+    // EXCLUIR
+    // ------------------------------
+    public void excluir(ContratoLocacao contratoLocacao) {
+        EntityManager em = getEntityManager();
+        try {
+            em.getTransaction().begin();
+
+            ContratoLocacao c = em.find(ContratoLocacao.class, contratoLocacao.getId());
+            if (c != null) {
+                em.remove(c);
+            }
+
+            em.getTransaction().commit();
+
+        } catch (Exception e) {
+            LOGGER.error("Erro ao excluir contrato ID: " + contratoLocacao.getId(), e);
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
             throw e;
+
+        } finally {
+            em.close();
         }
     }
 
+    // ------------------------------
+    // BUSCAR POR ID
+    // ------------------------------
     public ContratoLocacao buscarPeloCodigo(Long id) {
-        return manager.find(ContratoLocacao.class, id);
+        EntityManager em = getEntityManager();
+
+        try {
+            return em.find(ContratoLocacao.class, id);
+        } finally {
+            em.close();
+        }
     }
 
+    // ------------------------------
+    // BUSCAR TODOS
+    // ------------------------------
     @SuppressWarnings("unchecked")
     public List<ContratoLocacao> buscarTodos() {
-        String query = "SELECT c FROM ContratoLocacao c " +
+        EntityManager em = getEntityManager();
+
+        try {
+            String query = "SELECT c FROM ContratoLocacao c " +
                     "LEFT JOIN FETCH c.imovel " +
                     "LEFT JOIN FETCH c.inquilino " +
                     "LEFT JOIN FETCH c.fiador";
-        
-        Query q = manager.createQuery(query);
-        return q.getResultList();
+
+            return em.createQuery(query).getResultList();
+
+        } finally {
+            em.close();
+        }
     }
 }

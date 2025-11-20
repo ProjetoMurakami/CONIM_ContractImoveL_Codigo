@@ -1,44 +1,51 @@
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\dao\inquilinoDao.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\converter\localDateConverter.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\filter\AuthFilter.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\Imovel.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\jpa\TransactionInterceptor.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\converter\inquilinoConverter.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\dto\FiltroInquilino.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\inquilinoBean.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\Usuario.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\service\inquilinoService.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\dao\contratoLocacaoDao.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\Pagamento.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\Fiador.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\service\usuarioService.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\jpa\Transactional.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\FacesUtil.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\service\fiadorService.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\service\imovelService.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\dao\imovelDao.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\converter\fiadorConverter.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\service\contratoLocacaoService.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\CpfValidator.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\pagamentoBean.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\ContratoLocacao.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\redirectBean.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\Inquilino.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\contratoLocacaoBean.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\dao\fiadorDao.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\cdi\CDIServiceLocator.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\jpa\EntityManagerProducer.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\dao\usuarioDao.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\enums\FormasPagamento.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\converter\imovelConverter.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\dto\FiltroImovel.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\enums\StatusImovel.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\dao\pagamentoDao.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\service\pagamentoService.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\enums\Role.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\enums\TiposCliente.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\loginBean.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\converter\contratoConverter.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\fiadorBean.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\imovelBean.java
-C:\Users\rosag\Documents\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\usuarioBean.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\cdi\CDIServiceLocator.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\api\PagamentoResource.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\dto\FiltroImovel.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\imovelBean.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\redirectBean.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\enums\StatusImovel.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\dao\usuarioDao.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\jpa\TransactionInterceptor.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\dao\inquilinoDao.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\service\fiadorService.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\usuarioBean.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\service\usuarioService.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\converter\contratoConverter.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\CpfValidator.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\api\ApplicationConfig.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\Usuario.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\api\ContratoLocacaoResource.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\Inquilino.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\dto\FiltroInquilino.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\dao\pagamentoDao.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\Pagamento.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\service\inquilinoService.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\Fiador.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\ContratoLocacao.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\fiadorBean.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\inquilinoBean.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\Imovel.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\jpa\EntityManagerProducer.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\converter\fiadorConverter.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\dao\fiadorDao.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\service\contratoLocacaoService.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\jpa\JPAUtil.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\enums\TiposCliente.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\service\pagamentoService.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\converter\imovelConverter.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\contratoLocacaoBean.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\filter\AuthFilter.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\converter\inquilinoConverter.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\dao\contratoLocacaoDao.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\jpa\Transactional.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\dao\imovelDao.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\util\FacesUtil.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\api\ImovelResource.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\model\converter\localDateConverter.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\service\imovelService.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\api\TesteResource.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\enums\FormasPagamento.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\loginBean.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\api\InquilinoResource.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\view\pagamentoBean.java
+C:\Users\Vitória Nabeiro\CONIM_ContractImoveL_Codigo\ContractImovel\src\main\java\ContractImovel\enums\Role.java

@@ -1,74 +1,82 @@
 package ContractImovel.model.dao;
 
+import ContractImovel.model.Imovel;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+public class imovelDao implements Serializable {
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import ContractImovel.model.Imovel;
-import ContractImovel.util.jpa.Transactional;
-
-public class imovelDao implements Serializable{
     private static final long serialVersionUID = 1L;
-    @Inject
-    private EntityManager manager;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(imovelDao.class);
-	
-	@Transactional 
-    public Imovel salvar(Imovel imovel) throws PersistenceException {
-        LOGGER.info("salvar DAO... imovel = " + imovel);
+    private static EntityManagerFactory factory = 
+            Persistence.createEntityManagerFactory("testePU");
+
+    private EntityManager getManager() {
+        return factory.createEntityManager();
+    }
+
+    public Imovel salvar(Imovel imovel) {
+        EntityManager manager = getManager();
         try {
-            Imovel imovelSalvo = manager.merge(imovel);
-            manager.flush(); 
-            return imovelSalvo;
-        } catch (PersistenceException e) {
-            LOGGER.error("Erro ao salvar imóvel", e);
+            manager.getTransaction().begin();
+            Imovel salvo = manager.merge(imovel);
+            manager.getTransaction().commit();
+            return salvo;
+        } catch (Exception e) {
+            manager.getTransaction().rollback();
             throw e;
+        } finally {
+            manager.close();
         }
     }
-    
-    @Transactional 
-    public void excluir(Imovel imovel) throws PersistenceException {
+
+    public void excluir(Imovel imovel) {
+        EntityManager manager = getManager();
         try {
-			LOGGER.info("Excluir DAO... imovel = " + imovel);
-            Imovel imovelGerenciado = manager.find(Imovel.class, imovel.getId());
-            if (imovelGerenciado != null) {
-                manager.remove(imovelGerenciado);
-                manager.flush();
+            manager.getTransaction().begin();
+            Imovel gerenciado = manager.find(Imovel.class, imovel.getId());
+            if (gerenciado != null) {
+                manager.remove(gerenciado);
             }
-        } catch (PersistenceException e) {
-            LOGGER.error("Erro ao excluir imóvel ID: " + imovel.getId(), e);
+            manager.getTransaction().commit();
+        } catch (Exception e) {
+            manager.getTransaction().rollback();
             throw e;
+        } finally {
+            manager.close();
         }
     }
-	
-	public Imovel buscarPeloCodigo(Long id) {
-		return manager.find(Imovel.class, id);
-	}
 
-	@SuppressWarnings("unchecked")
-	public List<Imovel> buscarTodos() {
-		
-		String query="select i from Imovel i";
-		
-		Query q = manager.createQuery(query);
-		
-		return q.getResultList();
-	}	
+    public Imovel buscarPeloCodigo(Long id) {
+        EntityManager manager = getManager();
+        try {
+            return manager.find(Imovel.class, id);
+        } finally {
+            manager.close();
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public List<Imovel> buscarDisponiveis(){
-		String query="SELECT i FROM Imovel i WHERE i.statusImovel = 'DISPONIVEL'";
+    public List<Imovel> buscarTodos() {
+        EntityManager manager = getManager();
+        try {
+            return manager.createQuery("select i from Imovel i", Imovel.class)
+                    .getResultList();
+        } finally {
+            manager.close();
+        }
+    }
 
-		Query q = manager.createQuery(query);
-
-		return q.getResultList();
-	}
+    public List<Imovel> buscarDisponiveis() {
+        EntityManager manager = getManager();
+        try {
+            return manager.createQuery(
+                    "select i from Imovel i where i.statusImovel = 'DISPONIVEL'", 
+                    Imovel.class
+            ).getResultList();
+        } finally {
+            manager.close();
+        }
+    }
 }
