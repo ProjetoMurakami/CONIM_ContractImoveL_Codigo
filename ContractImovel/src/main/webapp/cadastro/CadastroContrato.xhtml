@@ -54,6 +54,12 @@
                     </h:outputText>
                 </p:column>
 
+                <p:column headerText="Corretor">
+                    <h:outputText value="#{c.corretor}">
+                        <f:converter converterId="usuarioConverter" />
+                    </h:outputText>
+                </p:column>
+                
                 <p:column headerText="Ações" style="text-align:center;">
                     <p:commandButton icon="pi pi-pencil" title="Editar"
                                     update=":formularioContratoLocacao:editarContratoDialog"
@@ -104,6 +110,15 @@
                             <f:selectItem itemLabel="Selecione um fiador" itemValue="#{null}" />
                             <f:selectItems value="#{contratoLocacaoBean.fiadores}" var="f"
                                         itemLabel="#{f.nome} - #{f.documento}" itemValue="#{f}" />
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="corretor" value="Corretor:" style="margin-top:1rem;" />
+                        <p:selectOneMenu id="corretor"
+                                        value="#{contratoLocacaoBean.contrato.corretor}"
+                                        converter="usuarioConverter" style="width:100%">
+                            <f:selectItem itemLabel="Selecione um corretor" itemValue="#{null}" />
+                            <f:selectItems value="#{contratoLocacaoBean.corretores}" var="c"
+                                        itemLabel="#{c.nome} - #{c.cpf}" itemValue="#{c}" />
                         </p:selectOneMenu>
 
                         <p:button value="Novo Fiador" icon="pi pi-user-plus"

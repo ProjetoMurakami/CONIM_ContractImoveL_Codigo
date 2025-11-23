@@ -52,7 +52,7 @@ public class ContratoLocacao implements Serializable{
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "corretor_id")
-    private Usuario usuario;
+    private Usuario corretor;
 
     @OneToMany(mappedBy = "contratoLocacao", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Pagamento> pagamentos = new ArrayList<>();

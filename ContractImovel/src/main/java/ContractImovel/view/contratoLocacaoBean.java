@@ -38,13 +38,16 @@ public class contratoLocacaoBean implements Serializable{
     private inquilinoService inquilinoService;
     @Inject
     private fiadorService fiadorService;
+    @Inject
+    private usuarioService usuarioService;
 
     private List<ContratoLocacao> contratos = new ArrayList<ContratoLocacao>();
     private List<Imovel> imoveis = new ArrayList<Imovel>();
     private List<Imovel> imoveisDisponiveis = new ArrayList<Imovel>();
     private List<Inquilino> inquilinos = new ArrayList<Inquilino>();
     private List<Fiador> fiadores = new ArrayList<Fiador>();
-    private List<Pagamento> pagamentosDoContrato = new ArrayList<Pagamento>(); // ✅ NOVO
+    private List<Pagamento> pagamentosDoContrato = new ArrayList<Pagamento>();
+    private List<Usuario> corretores = new ArrayList<Usuario>();
 
     private ContratoLocacao contrato = new ContratoLocacao();
     private Fiador fiador = new Fiador();
@@ -61,6 +64,7 @@ public class contratoLocacaoBean implements Serializable{
         imoveisDisponiveis = imovelService.buscarDisponiveis();
         inquilinos = inquilinoService.buscarTodos();
         fiadores = fiadorService.buscarTodos();
+        corretores = usuarioService.listarTodos();
         contrato = new ContratoLocacao();
         fiador = new Fiador();
         pagamentoSelecionado = new Pagamento();
@@ -139,7 +143,6 @@ public class contratoLocacaoBean implements Serializable{
         try {
             if (contrato != null && contrato.getId() != null) {
                 this.contrato = contratoLocacaoService.buscarPorId(contrato.getId());
-                // ✅ CARREGA OS PAGAMENTOS AO SELECIONAR CONTRATO
                 carregarPagamentosDoContrato();
             } else {
                 this.contrato = contrato;

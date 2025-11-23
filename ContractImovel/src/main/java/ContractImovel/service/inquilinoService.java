@@ -4,7 +4,6 @@ import ContractImovel.model.Inquilino;
 import ContractImovel.model.dao.inquilinoDao;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.util.List;
 public class inquilinoService implements Serializable {
@@ -23,12 +22,10 @@ public class inquilinoService implements Serializable {
         }
     }
 
-    @Transactional
     public Inquilino salvar(Inquilino inquilino) {
         return inquilinoDao.salvar(inquilino);
     }
 
-    @Transactional
     public void excluir(Inquilino inquilino) {
         inquilinoDao.excluir(inquilino);
     }

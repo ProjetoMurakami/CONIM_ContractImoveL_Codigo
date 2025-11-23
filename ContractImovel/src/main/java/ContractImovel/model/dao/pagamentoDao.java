@@ -58,7 +58,6 @@ public class pagamentoDao implements Serializable{
     public List<Pagamento> buscarPorContrato(Long contratoId) {
         try {
             TypedQuery<Pagamento> query = manager.createQuery(
-                // ✅ CORREÇÃO: Use contratoLocacao (nome do atributo Java)
                 "SELECT p FROM Pagamento p WHERE p.contratoLocacao.id = :contratoId ORDER BY p.dataVencimento", 
                 Pagamento.class
             );
