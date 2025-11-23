@@ -43,7 +43,7 @@ public class Pagamento implements Serializable{
     private FormasPagamento formaDePagamento;
 
     @ManyToOne
-    @JoinColumn(name = "contrato_locacao_id")
+    @JoinColumn(name = "contrato_locacao_id") 
     private ContratoLocacao contratoLocacao;
 
     public String getDataPagamentoFormatada() {
@@ -53,6 +53,4 @@ public class Pagamento implements Serializable{
     public String getDataVencimentoFormatada() {
         return dataVencimento != null ? dataVencimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) : "";
     }
-   
 }
-

@@ -56,7 +56,8 @@ public class contratoLocacaoDao implements Serializable{
         String query = "SELECT c FROM ContratoLocacao c " +
                     "LEFT JOIN FETCH c.imovel " +
                     "LEFT JOIN FETCH c.inquilino " +
-                    "LEFT JOIN FETCH c.fiador";
+                    "LEFT JOIN FETCH c.fiador " +
+                    "LEFT JOIN FETCH c.corretor";
         
         Query q = manager.createQuery(query);
         return q.getResultList();

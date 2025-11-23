@@ -38,25 +38,58 @@ public class contratoLocacaoBean implements Serializable{
     private inquilinoService inquilinoService;
     @Inject
     private fiadorService fiadorService;
+    @Inject
+    private usuarioService usuarioService;
 
     private List<ContratoLocacao> contratos = new ArrayList<ContratoLocacao>();
     private List<Imovel> imoveis = new ArrayList<Imovel>();
     private List<Imovel> imoveisDisponiveis = new ArrayList<Imovel>();
     private List<Inquilino> inquilinos = new ArrayList<Inquilino>();
     private List<Fiador> fiadores = new ArrayList<Fiador>();
+    private List<Pagamento> pagamentosDoContrato = new ArrayList<Pagamento>();
+    private List<Usuario> corretores = new ArrayList<Usuario>();
 
     private ContratoLocacao contrato = new ContratoLocacao();
     private Fiador fiador = new Fiador();
+    private Pagamento pagamentoSelecionado = new Pagamento(); // ✅ NOVO
 
     @PostConstruct
     public void inicializar() {
+        carregarDados();
+    }
+
+    private void carregarDados() {
         contratos = contratoLocacaoService.buscarTodos();
         imoveis = imovelService.buscarTodos();
         imoveisDisponiveis = imovelService.buscarDisponiveis();
         inquilinos = inquilinoService.buscarTodos();
         fiadores = fiadorService.buscarTodos();
+        corretores = usuarioService.listarTodos();
         contrato = new ContratoLocacao();
         fiador = new Fiador();
+        pagamentoSelecionado = new Pagamento();
+    }
+
+    public void carregarPagamentosDoContrato() {
+        if (contrato != null && contrato.getId() != null) {
+            try {
+                pagamentosDoContrato = pagamentoService.buscarPorContrato(contrato.getId());
+                log.info("Carregados " + pagamentosDoContrato.size() + " pagamentos para o contrato " + contrato.getId());
+            } catch (Exception e) {
+                log.error("Erro ao carregar pagamentos do contrato", e);
+                pagamentosDoContrato = new ArrayList<>();
+                FacesContext.getCurrentInstance().addMessage(null,
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", 
+                        "Erro ao carregar pagamentos: " + e.getMessage()));
+            }
+        } else {
+            pagamentosDoContrato = new ArrayList<>();
+        }
+    }
+
+    public void selecionarPagamento(Pagamento pagamento) {
+        this.pagamentoSelecionado = pagamento;
+        log.info("Pagamento selecionado para edição: " + pagamento.getId());
     }
 
     public void salvar() {
@@ -102,20 +135,24 @@ public class contratoLocacaoBean implements Serializable{
 
     public void limpar() {
         contrato = new ContratoLocacao();
+        pagamentosDoContrato = new ArrayList<>();
+        pagamentoSelecionado = new Pagamento();
     }
 
     public void setContrato(ContratoLocacao contrato) {
-    try {
-        if (contrato != null && contrato.getId() != null) {
-            this.contrato = contratoLocacaoService.buscarPorId(contrato.getId());
-        } else {
-            this.contrato = contrato;
+        try {
+            if (contrato != null && contrato.getId() != null) {
+                this.contrato = contratoLocacaoService.buscarPorId(contrato.getId());
+                carregarPagamentosDoContrato();
+            } else {
+                this.contrato = contrato;
+                this.pagamentosDoContrato = new ArrayList<>();
+            }
+        } catch (Exception e) {
+            log.error("Erro ao carregar contrato", e);
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", 
+                    "Erro ao carregar contrato: " + e.getMessage()));
         }
-    } catch (Exception e) {
-        log.error("Erro ao carregar contrato", e);
-        FacesContext.getCurrentInstance().addMessage(null,
-            new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro", 
-                "Erro ao carregar contrato: " + e.getMessage()));
     }
-}
 }

@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.transaction.Transactional;
 
 import ContractImovel.model.Usuario;
 import ContractImovel.model.dao.usuarioDao;
@@ -13,17 +12,28 @@ import ContractImovel.model.dao.usuarioDao;
 public class usuarioService implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
     @Inject
     private usuarioDao usuarioDAO;
 
     public Usuario autenticar(String username, String senha) {
-        return usuarioDAO.buscarPorUsernameESenha(username, senha);
+        Usuario user = usuarioDAO.buscarPorUsernameESenha(username, senha);
+
+        if(user == null){
+            return null;
+        }
+        return user;
     }
 
-    @Transactional
     public void salvar(Usuario usuario) {
         usuarioDAO.salvar(usuario);
+    }
+
+    public void excluir(Usuario usuario) {
+        usuarioDAO.excluir(usuario);
+    }
+
+    public Usuario buscarPorId(Long id) {
+        return usuarioDAO.buscarPorId(id);
     }
 
     public List<Usuario> listarTodos() {
