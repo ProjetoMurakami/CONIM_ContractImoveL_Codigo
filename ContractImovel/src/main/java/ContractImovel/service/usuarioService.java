@@ -5,6 +5,9 @@ import java.util.List;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ContractImovel.model.Usuario;
 import ContractImovel.model.dao.usuarioDao;
 
@@ -12,6 +15,9 @@ import ContractImovel.model.dao.usuarioDao;
 public class usuarioService implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(usuarioService.class);
+    
     @Inject
     private usuarioDao usuarioDAO;
 
@@ -33,7 +39,12 @@ public class usuarioService implements Serializable {
     }
 
     public Usuario buscarPorId(Long id) {
-        return usuarioDAO.buscarPorId(id);
+        try {
+            return usuarioDAO.buscarPorId(id);
+        } catch (Exception e) {
+            LOGGER.error("Erro ao buscar pelo id de Usuario: " + id, e);
+            return null;
+        }
     }
 
     public List<Usuario> listarTodos() {

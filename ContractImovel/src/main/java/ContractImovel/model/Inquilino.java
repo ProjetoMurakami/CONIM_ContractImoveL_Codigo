@@ -1,4 +1,5 @@
 package ContractImovel.model;
+
 import java.io.Serializable;
 
 import javax.persistence.Entity;
@@ -32,7 +33,7 @@ public class Inquilino implements Serializable{
     private String email;
     private String documento;
     private String telefone;
-    private double rendaMensal;
+    private Double rendaMensal;
     
     @Enumerated(EnumType.STRING) 
     private TiposCliente categoria;

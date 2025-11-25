@@ -22,14 +22,9 @@ public class pagamentoDao implements Serializable{
     private static final Logger LOGGER = LoggerFactory.getLogger(pagamentoDao.class);
 
     @Transactional
-    public Pagamento salvar(Pagamento pagamento) {
+    public void salvar(Pagamento pagamento) {
         try {
-            if (pagamento.getId() == null) {
-                manager.persist(pagamento);
-                return pagamento;
-            } else {
-                return manager.merge(pagamento);
-            }
+            manager.merge(pagamento);
         } catch (PersistenceException e) {
             LOGGER.error("Erro no DAO ao salvar Pagamento", e);
             throw e;
@@ -38,13 +33,13 @@ public class pagamentoDao implements Serializable{
 
     @Transactional
     public void excluir(Pagamento pagamento) throws PersistenceException {
-        
         try {
-            Pagamento pag = manager.find(Pagamento.class, pagamento.getId());
-            if (pag != null) {
-                manager.remove(pag);
+            Pagamento pagamengoExcluido = manager.find(Pagamento.class, pagamento.getId());
+            if (pagamengoExcluido != null) {
+                manager.remove(pagamengoExcluido);
                 manager.flush();
-            }
+            }else
+                LOGGER.error("Pagamento a ser excluído não existe");
         } catch (PersistenceException e) {
             e.printStackTrace();
             throw e;

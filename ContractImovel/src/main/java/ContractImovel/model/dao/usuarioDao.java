@@ -23,27 +23,10 @@ public class usuarioDao implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(usuarioDao.class);
 
-    public Usuario buscarPorUsernameESenha(String username, String senha) {
-        try {
-            return manager.createQuery(
-                    "SELECT u FROM Usuario u WHERE u.username = :username AND u.senha = :senha", Usuario.class)
-                    .setParameter("username", username)
-                    .setParameter("senha", senha)
-                    .getSingleResult();
-        } catch (NoResultException e) {
-            return null;
-        }
-    }
-
     @Transactional
-    public Usuario salvar(Usuario usuario) {
+    public void salvar(Usuario usuario) {
         try{
-            if (usuario.getId() == null) {
-                manager.persist(usuario);
-                return usuario;
-            } else {
-                return manager.merge(usuario);
-            }
+            manager.merge(usuario);
         } catch (PersistenceException e) {
             LOGGER.error("Erro no DAO ao salvar Pagamento", e);
             throw e;
@@ -58,7 +41,8 @@ public class usuarioDao implements Serializable {
             if (user != null) {
                 manager.remove(user);
                 manager.flush();
-            }
+            }else
+                LOGGER.error("Usuario a ser excluído não existe");
         } catch (PersistenceException e) {
             e.printStackTrace();
             throw e;
@@ -71,5 +55,17 @@ public class usuarioDao implements Serializable {
 
     public java.util.List<Usuario> listarTodos() {
         return manager.createQuery("SELECT u FROM Usuario u", Usuario.class).getResultList();
+    }
+
+    public Usuario buscarPorUsernameESenha(String username, String senha) {
+        try {
+            return manager.createQuery(
+        "SELECT u FROM Usuario u WHERE u.username = :username AND u.senha = :senha", Usuario.class)
+                    .setParameter("username", username)
+                    .setParameter("senha", senha)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

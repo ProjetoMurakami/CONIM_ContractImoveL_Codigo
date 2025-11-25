@@ -1,5 +1,7 @@
 package ContractImovel.view;
 
+import java.sql.SQLIntegrityConstraintViolationException;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,14 +14,15 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j;
 import ContractImovel.enums.StatusImovel;
 import ContractImovel.model.Imovel;
 import ContractImovel.service.imovelService;
 
-@Log4j
 @Getter
 @Setter
 @Named
@@ -28,6 +31,8 @@ public class imovelBean implements  Serializable{
 
     private static final long serialVersionUID = 1L;
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(imovelBean.class);
+
 	@Inject
 	private imovelService imovelService;
 	private Imovel imovel = new Imovel();
@@ -35,28 +40,21 @@ public class imovelBean implements  Serializable{
 	
 	@PostConstruct
 	public void inicializar() {
-		log.debug("init pesquisa"); 
 		this.setImoveis(imovelService.buscarTodos());
 		limpar();
 	}
 	
 	public void salvar() {
 		try {
-			log.info("Salvando imóvel: " + imovel.toString());
 			imovelService.salvar(imovel);
-			
-			this.imoveis = imovelService.buscarTodos();
+			imoveis = imovelService.buscarTodos();
 			
 			FacesContext.getCurrentInstance().addMessage(null, 
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", 
 					"Imóvel salvo com sucesso!"));
-			
-			if (imovel.getId() == null) {
-				limpar();
-			}
-			
+			limpar();
 		} catch (Exception e) {
-			log.error("Erro ao salvar imóvel", e);
+			LOGGER.error("Erro ao salvar imóvel", e);
 			FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", 
 					"Erro ao salvar imóvel: " + e.getMessage()));
@@ -66,17 +64,30 @@ public class imovelBean implements  Serializable{
 	public void excluir() {
 		try {
 			imovelService.excluir(imovel);
-			this.imoveis = imovelService.buscarTodos();
+			imoveis = imovelService.buscarTodos();
 			
 			FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!",
 					"Imóvel excluído com sucesso!"));
-					
+						
 		} catch (Exception e) {
-			log.error("Erro ao excluir imóvel", e);
+			LOGGER.error("Erro ao excluir imóvel", e);
+
+			String msgUser = "Erro ao excluir imóvel: " + e.getMessage();
+			
+			if (e.getCause() != null) {
+				Throwable cause = e.getCause();
+				while (cause != null) {
+					if (cause instanceof SQLIntegrityConstraintViolationException) {
+						msgUser = "Não é possível excluir este imóvel, pois ele está associado a um contrato ativo.";
+						break;
+					}
+					cause = cause.getCause();
+				}
+			}
+
 			FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!",
-					"Erro ao excluir imóvel: " + e.getMessage()));
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", msgUser));
 		}
 	}
 		

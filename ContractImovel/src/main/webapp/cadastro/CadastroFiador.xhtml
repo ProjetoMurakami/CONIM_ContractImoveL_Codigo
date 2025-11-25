@@ -1,94 +1,181 @@
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+    xmlns="http://www.w3.org/1999/xhtml"
     xmlns:h="http://xmlns.jcp.org/jsf/html"
     xmlns:f="http://xmlns.jcp.org/jsf/core"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
     xmlns:p="http://primefaces.org/ui">
 
-<f:view>
-    <h:head>
-        <title>Cadastro de Fiador</title>
-    </h:head>
-    <h:body>
-        <h:form id="formFiador">
-            <h1>Cadastro de Fiador</h1>
-            
-            <p:growl id="growlFiador" showDetail="true" />
+    <ui:define name="titulo">Cadastro de Fiadores</ui:define>
 
-            <p:panel header="Dados do Fiador" style="margin-bottom: 20px;">
-                <h:panelGrid columns="2" cellpadding="5" style="width: 100%;">
-                    <!-- Dados Pessoais -->
-                    <h:outputLabel for="nome" value="Nome: *" />
-                    <p:inputText id="nome" value="#{fiadorBean.fiador.nome}" 
-                                required="true" requiredMessage="Nome é obrigatório"
-                                style="width: 300px;" />
+    <ui:define name="corpo">
+        <h:form id="formularioFiador">
+            <h1>Cadastro de Fiadores</h1>
 
-                    <h:outputLabel for="documento" value="Documento: " />
-                    <p:inputMask id="documento" value="#{fiadorBean.fiador.documento}" 
-                                mask="999.999.999-99" required="true"
-                                requiredMessage="Documento é obrigatório" />
+            <p:growl id="growl" showDetail="true" sticky="false" life="3000" />
 
-                    <h:outputLabel for="email" value="Email:" />
-                    <p:inputText id="email" value="#{fiadorBean.fiador.email}" 
-                                style="width: 300px;" />
+            <p:toolbar style="margin-top: 20px">
+                <p:toolbarGroup>
+                    <p:commandButton icon="pi pi-plus" value="Novo" id="botaoNovoFiador"
+                        action="#{fiadorBean.limpar}"
+                        oncomplete="PF('editarFiadorDialogWidgetVar').show()"
+                        update="editarFiadorDialog" 
+                        process="@this"/>
+                </p:toolbarGroup>
+            </p:toolbar>
 
-                    <h:outputLabel for="telefone" value="Telefone:" />
-                    <p:inputMask id="telefone" value="#{fiadorBean.fiador.telefone}" 
-                                mask="(99) 99999-9999" />
+            <p:dataTable id="fiadoresTable" var="fiador" value="#{fiadorBean.fiadores}"
+                lazy="false" showGridlines="true" 
+                style="margin-top: 20px" emptyMessage="Nenhum fiador encontrado." rows="10" 
+                paginator="true" paginatorAlwaysVisible="true" paginatorPosition="bottom" 
+                rowsPerPageTemplate="5,10,15">
 
-                    <h:outputLabel for="rendaMensal" value="Renda Mensal:" />
-                    <p:inputNumber id="rendaMensal" value="#{fiadorBean.fiador.rendaMensal}" 
-                                  minFractionDigits="2" decimalSeparator="," 
-                                  thousandSeparator="." style="width: 150px;" />
+                <p:column headerText="ID" style="width: 40px; text-align: center" sortBy="#{fiador.id}">
+                    <h:outputText value="#{fiador.id}" />
+                </p:column>
 
-                    <h:outputLabel for="categoria" value="Categoria:" />
-                    <p:selectOneMenu id="categoria" value="#{fiadorBean.fiador.categoria}" 
-                                   style="width: 200px;">
-                        <f:selectItem itemLabel="Selecione..." itemValue="#{null}" />
-                        <f:selectItems value="#{fiadorBean.tiposCliente}" />
-                    </p:selectOneMenu>
-                </h:panelGrid>
-            </p:panel>
+                <p:column headerText="Nome" style="width: 150px; text-align: left" filterBy="#{fiador.nome}">
+                    <h:outputText value="#{fiador.nome}" />
+                </p:column>
 
-            <p:panel header="Endereço" toggleable="true" collapsed="true">
-                <h:panelGrid columns="2" cellpadding="5">
-                    <h:outputLabel for="cep" value="CEP:" />
-                    <p:inputMask id="cep" value="#{fiadorBean.fiador.CEP}" mask="99999-999" />
+                <p:column headerText="Documento" style="width: 120px; text-align: left" filterBy="#{fiador.documento}">
+                    <h:outputText value="#{fiador.documento}" />
+                </p:column>
 
-                    <h:outputLabel for="endereco" value="Endereço:" />
-                    <p:inputText id="endereco" value="#{fiadorBean.fiador.endereco}" 
-                                style="width: 300px;" />
-                    
-                    <h:outputLabel for="numero" value="Número:" />
-                    <p:inputText id="numero" value="#{fiadorBean.fiador.numero}" 
-                                style="width: 100px;" />
+                <p:column headerText="Telefone" style="width: 120px; text-align: left" filterBy="#{fiador.telefone}">
+                    <h:outputText value="#{fiador.telefone}" />
+                </p:column>
 
-                    <h:outputLabel for="bairro" value="Bairro:" />
-                    <p:inputText id="bairro" value="#{fiadorBean.fiador.bairro}" 
-                                style="width: 200px;" />
-                </h:panelGrid>
-            </p:panel>
+                <p:column headerText="Email" style="width: 150px; text-align: left" filterBy="#{fiador.email}">
+                    <h:outputText value="#{fiador.email}" />
+                </p:column>
 
-            <p:panel header="Observações">
-                <p:inputTextarea id="observacoes" value="#{fiadorBean.fiador.observacoes}" 
-                               rows="3" style="width: 100%" />
-            </p:panel>
+                <p:column headerText="Renda Mensal" style="width: 120px; text-align: right" filterBy="#{fiador.rendaMensal}">
+                    <h:outputText value="#{fiador.rendaMensal}">
+                        <f:convertNumber pattern="R$ #,##0.00" />
+                    </h:outputText>
+                </p:column>
 
-            <div style="margin-top: 20px;">
-                <p:commandButton value="Salvar Fiador" icon="pi pi-save" 
-                               action="#{fiadorBean.salvar}"
-                               update="growlFiador" process="@form" />
-                
-                <p:commandButton value="Limpar" icon="pi pi-refresh" 
-                               action="#{fiadorBean.limparFormulario}"
-                               update="formFiador" process="@this"
-                               style="margin-left: 10px;" />
-                
-                <p:button value="Voltar para Contratos" icon="pi pi-arrow-left"
-                         outcome="/cadastro/CadastroContrato.xhtml" 
-                         style="margin-left: 10px;" />
-            </div>
+                <p:column headerText="Operações" style="width: 100px; text-align: center">
+                    <p:commandButton id="cbEditarFiador" icon="pi pi-pencil" title="Editar"
+                        oncomplete="PF('editarFiadorDialogWidgetVar').show()"
+                        update=":formularioFiador:editarFiadorDialog" process="@this">
+                        <f:setPropertyActionListener target="#{fiadorBean.fiador}" value="#{fiador}" />
+                    </p:commandButton>
+                    <p:commandButton icon="pi pi-trash" title="Excluir" onclick="PF('confirmacaoExclusaoFiador').show();" process="@this">
+                        <f:setPropertyActionListener target="#{fiadorBean.fiador}" value="#{fiador}" />
+                    </p:commandButton>
+                </p:column>
+
+            </p:dataTable>
+
+            <p:dialog id="editarFiadorDialog" header="Fiador" widgetVar="editarFiadorDialogWidgetVar"
+                modal="true" resizable="true" closeOnEscape="true" 
+                showEffect="explode" hideEffect="explode"
+                width="800px" position="center top" maximizable="true" 
+                height="auto" dynamic="true" responsive="true"
+                styleClass="dialog-scrollable">
+
+                <p:outputPanel style="display: block; max-height: 70vh; overflow-y: auto;">
+                    <h:panelGrid columns="2" style="width: 100%; margin-bottom: 20px;">
+                        <p:outputLabel for="idFiador" value="ID: " />
+                        <p:outputLabel id="idFiador" value="#{fiadorBean.fiador.id}" rendered="#{fiadorBean.fiador.id != null}" />
+                        <p:outputLabel id="idNovoFiador" value="Novo" rendered="#{fiadorBean.fiador.id == null}" />
+
+                        <p:outputLabel for="nomeFiador" value="Nome: " />
+                        <p:inputText id="nomeFiador" value="#{fiadorBean.fiador.nome}" maxlength="100" 
+                                    requiredMessage="Nome é obrigatório" required="true" style="width: 300px;" />
+
+                        <h:outputLabel for="documentoFiador" value="Documento: *" />
+                        <h:inputText id="documentoFiador" 
+                                    value="#{fiadorBean.fiador.documento}" 
+                                    required="true"
+                                    requiredMessage="O documento é obrigatório."
+                                    validator="#{fiadorBean.validarDocumento}">
+                            <f:ajax event="blur" render="documentoMSG" />
+                        </h:inputText>
+
+                        <p:outputLabel for="telefoneFiador" value="Telefone:" />
+                        <p:inputMask id="telefoneFiador" value="#{fiadorBean.fiador.telefone}" 
+                                    mask="(99) 99999-9999" />
+
+                        <p:outputLabel for="emailFiador" value="Email:" />
+                        <p:inputText id="emailFiador" value="#{fiadorBean.fiador.email}" 
+                                    style="width: 300px;" />
+
+                        <h:outputLabel for="rendaMensalFiador" value="Renda Mensal:" />
+                        <p:inputNumber id="rendaMensalFiador" value="#{fiadorBean.fiador.rendaMensal}" 
+                                    minFractionDigits="2" decimalSeparator="," 
+                                    thousandSeparator="." style="width: 150px;" />
+
+                        <h:outputLabel for="categoria" value="Categoria:" />
+                        <p:selectOneMenu id="categoria"
+                                        value="#{fiadorBean.fiador.categoria}"
+                                        required="true"
+                                        requiredMessage="Selecione uma categoria.">
+                            <f:selectItem itemLabel="Selecione uma categoria" itemValue="#{null}" />
+                            <f:selectItems value="#{fiadorBean.tiposCliente}" var="cat"
+                                        itemValue="#{cat}" itemLabel="#{fiadorBean.labelCategoria(cat)}" />
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+                    <p:panel header="Endereço" toggleable="true" collapsed="true" style="margin-bottom: 20px;">
+                        <h:panelGrid columns="2" style="width: 100%;">
+                            <p:outputLabel for="cepFiador" value="CEP:" />
+                            <p:inputMask id="cepFiador" value="#{fiadorBean.fiador.CEP}" mask="99999-999" />
+
+                            <p:outputLabel for="enderecoFiador" value="Endereço:" />
+                            <p:inputText id="enderecoFiador" value="#{fiadorBean.fiador.endereco}" 
+                                        style="width: 300px;" />
+                            
+                            <p:outputLabel for="numeroFiador" value="Número:" />
+                            <p:inputText id="numeroFiador" value="#{fiadorBean.fiador.numero}" 
+                                        style="width: 100px;" />
+
+                            <p:outputLabel for="bairroFiador" value="Bairro:" />
+                            <p:inputText id="bairroFiador" value="#{fiadorBean.fiador.bairro}" 
+                                        style="width: 200px;" />
+                        </h:panelGrid>
+                    </p:panel>
+
+                    <p:panel header="Observações" style="margin-bottom: 20px;">
+                        <p:inputTextarea id="observacoesFiador" value="#{fiadorBean.fiador.observacoes}" 
+                                    rows="5" cols="50" maxlength="500" 
+                                    counter="contadorObsFiador" 
+                                    counterTemplate="{0} caracteres restantes"/>
+                        <h:outputText id="contadorObsFiador"/>
+                    </p:panel>
+                </p:outputPanel>
+
+                <f:facet name="footer">
+                    <p:commandButton icon="pi pi-save" id="salvarFiadorButton" value="Salvar"
+                        title="Gravar dados do fiador"
+                        action="#{fiadorBean.salvar}"
+                        oncomplete="if (!args.validationFailed) {PF('editarFiadorDialogWidgetVar').hide();}"
+                        update="growlFiador fiadoresTable" process="@form" />
+                        
+                    <p:commandButton value="Cancelar" icon="pi pi-times"
+                        onclick="PF('editarFiadorDialogWidgetVar').hide();"
+                        immediate="true" />
+                </f:facet>
+            </p:dialog>
+
+            <p:confirmDialog id="confirmacaoExclusaoFiadorDialog" 
+                widgetVar="confirmacaoExclusaoFiador"
+                message="Tem certeza que deseja excluir o fiador?"
+                header="Exclusão de fiador" severity="alert">
+                <p:button icon="pi pi-thumbs-down" value="Não" 
+                    onclick="PF('confirmacaoExclusaoFiador').hide(); return false;" 
+                    process="@this"/>
+                <p:commandButton 
+                icon="pi pi-thumbs-up" 
+                value="Sim" 
+                update=":formularioFiador : fiadoresTable"
+                onclick="PF('confirmacaoExclusaoFiador').hide();" 
+                action="#{fiadorBean.excluir}" 
+                process="@this"/>
+            </p:confirmDialog>
+
         </h:form>
-    </h:body>
-</f:view>
-</html>
+    </ui:define>
+
+</ui:composition>

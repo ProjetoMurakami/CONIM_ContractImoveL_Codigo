@@ -5,6 +5,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ContractImovel.model.ContratoLocacao;
 import ContractImovel.model.dao.contratoLocacaoDao;
 
@@ -12,27 +15,29 @@ public class contratoLocacaoService implements Serializable{
     
     private static final long serialVersionUID = 1L;
     
+    private static final Logger LOGGER = LoggerFactory.getLogger(contratoLocacaoService.class);
+    
     @Inject
     private contratoLocacaoDao contratoLocacaoDao;
-
-    public ContratoLocacao buscarPorId(Long contratoId) {
-        ContratoLocacao contrato = contratoLocacaoDao.buscarPeloCodigo(contratoId);
-        if (contrato == null){
-            throw new RuntimeException("Contrato não encontrado com o ID: " + contratoId);
-        }
-        return contratoLocacaoDao.buscarPeloCodigo(contratoId);
-    }
 
     public void salvar(ContratoLocacao contratoLocacao){
         contratoLocacaoDao.salvar(contratoLocacao);
     }
 
     public void excluir(ContratoLocacao contratoLocacao){
-        this.contratoLocacaoDao.excluir(contratoLocacao);
+        contratoLocacaoDao.excluir(contratoLocacao);
     }
 
     public List<ContratoLocacao> buscarTodos(){
         return contratoLocacaoDao.buscarTodos();
     }
-
+    
+    public ContratoLocacao buscarPorId(Long contratoId) {
+        try {
+            return contratoLocacaoDao.buscarPeloCodigo(contratoId);
+        } catch (Exception e) {
+            LOGGER.error("Erro ao buscar pelo id de contrato: " + contratoId, e);
+            return null;
+        }
+    }
 }
