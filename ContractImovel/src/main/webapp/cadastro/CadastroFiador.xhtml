@@ -11,7 +11,7 @@
         <h:form id="formularioFiador">
             <h1>Cadastro de Fiadores</h1>
 
-            <p:growl id="growlFiador" showDetail="false" />
+            <p:growl id="growl" showDetail="true" sticky="false" life="3000" />
 
             <p:toolbar style="margin-top: 20px">
                 <p:toolbarGroup>
@@ -159,12 +159,20 @@
                 </f:facet>
             </p:dialog>
 
-            <p:confirmDialog id="confirmacaoExclusaoFiadorDialog" widgetVar="confirmacaoExclusaoFiador"
-                message="Tem certeza que deseja excluir o fiador #{fiadorBean.fiador.nome}?"
+            <p:confirmDialog id="confirmacaoExclusaoFiadorDialog" 
+                widgetVar="confirmacaoExclusaoFiador"
+                message="Tem certeza que deseja excluir o fiador?"
                 header="Exclusão de fiador" severity="alert">
-                <p:button icon="pi pi-thumbs-down" value="Não" onclick="PF('confirmacaoExclusaoFiador').hide(); return false;" process="@this"/>
-                <p:commandButton icon="pi pi-thumbs-up" value="Sim" update=":formularioFiador:fiadoresTable"
-                    onclick="PF('confirmacaoExclusaoFiador').hide();" action="#{fiadorBean.excluir}" process="@this"/>
+                <p:button icon="pi pi-thumbs-down" value="Não" 
+                    onclick="PF('confirmacaoExclusaoFiador').hide(); return false;" 
+                    process="@this"/>
+                <p:commandButton 
+                icon="pi pi-thumbs-up" 
+                value="Sim" 
+                update=":formularioFiador : fiadoresTable"
+                onclick="PF('confirmacaoExclusaoFiador').hide();" 
+                action="#{fiadorBean.excluir}" 
+                process="@this"/>
             </p:confirmDialog>
 
         </h:form>

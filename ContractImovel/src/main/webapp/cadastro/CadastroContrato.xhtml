@@ -12,7 +12,7 @@
         <h:form id="formularioContratoLocacao">
             <h1>Cadastro de Contratos de Locação</h1>
 
-            <p:growl id="growlContrato" showDetail="false" />
+            <p:growl id="growl" showDetail="true" sticky="false" life="3000" />
 
             <p:commandButton icon="pi pi-plus" value="Novo Contrato" id="botaoNovoContrato"
                 action="#{contratoLocacaoBean.limpar}"
@@ -252,19 +252,19 @@
             </p:dialog>
 
             <p:confirmDialog id="confirmacaoExclusaoContratoDialog"
-                             widgetVar="confirmacaoExclusaoContrato"
-                             message="Tem certeza que deseja excluir o contrato?"
-                             header="Exclusão de Contrato" severity="alert">
-
-                <p:button icon="pi pi-times" value="Não"
+                        widgetVar="confirmacaoExclusaoContrato"
+                        message="Tem certeza que deseja excluir o contrato?"
+                        header="Exclusão de Contrato" severity="alert">
+                        <p:button icon="pi pi-thumbs-down" value="Não"
                           onclick="PF('confirmacaoExclusaoContrato').hide(); return false;"
                           process="@this" />
-
-                <p:commandButton icon="pi pi-check" value="Sim"
-                                 action="#{contratoLocacaoBean.excluir}"
-                                 update="@form growlContrato"
-                                 oncomplete="PF('confirmacaoExclusaoContrato').hide();"
-                                 process="@this" />
+                        <p:commandButton 
+                        icon="pi pi-thumbs-up" 
+                        value="Sim"
+                        update=":formularioContratoLocacao:growl :formularioContratoLocacao:contratosTable"
+                        onclick="PF('confirmacaoExclusaoContrato').hide();"
+                        action="#{contratoLocacaoBean.excluir}"
+                        process="@this" />
             </p:confirmDialog>
         </h:form>
     </ui:define>

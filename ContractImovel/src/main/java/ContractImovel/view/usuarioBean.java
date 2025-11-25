@@ -1,24 +1,24 @@
 package ContractImovel.view;
 
 import java.io.Serializable;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.List;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j;
 import ContractImovel.model.Usuario;
 import ContractImovel.enums.Role;
 import ContractImovel.service.usuarioService;
 import ContractImovel.util.CpfValidator;
 import ContractImovel.util.FacesUtil;
 
-@Log4j
 @Getter
 @Setter
 @Named
@@ -35,7 +35,6 @@ public class usuarioBean implements Serializable {
 
     @PostConstruct
     public void inicializar() {
-        log.debug("init pesquisa");
         usuarios = usuarioService.listarTodos();
         this.setUsuarios(usuarios);
     }
@@ -69,11 +68,22 @@ public class usuarioBean implements Serializable {
                 FacesUtil.addErrorMessage("Nenhum Usuario selecionado para exclusão.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
-			FacesContext.getCurrentInstance().addMessage(null, 
-			new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Ocorreu um problema", null));
-        }
+			String msgUser = "Erro ao excluir Usuário: " + e.getMessage();
+			
+			if (e.getCause() != null) {
+				Throwable cause = e.getCause();
+				while (cause != null) {
+					if (cause instanceof SQLIntegrityConstraintViolationException) {
+						msgUser = "Não é possível excluir este usuário, pois ele está associado a um contrato ativo.";
+						break;
+					}
+					cause = cause.getCause();
+				}
+			}
+
+			FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", msgUser));
+		}
     }
 
     public List<Usuario> listar() {

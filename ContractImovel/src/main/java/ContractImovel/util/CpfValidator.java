@@ -36,8 +36,6 @@ public class CpfValidator {
         return digito1 == digits[9] && digito2 == digits[10];
     }
 
-    /* ------------------------ CNPJ ------------------------ */
-
     public static boolean isValidCNPJ(String cnpj) {
         cnpj = unformat(cnpj);
 
@@ -74,8 +72,6 @@ public class CpfValidator {
         return dv1 == dig[12] && dv2 == dig[13];
     }
 
-    /* -------------------- Formatadores -------------------- */
-
     public static boolean isValid(String documento) {
         documento = unformat(documento);
 
@@ -106,4 +102,5 @@ public class CpfValidator {
         if (value == null) return null;
         return value.replaceAll("\\D", "");
     }
+
 }

@@ -14,7 +14,7 @@
 
 		<h1>Cadastro de Imóveis</h1>
 
-		<p:growl id="growl" showDetail="false" />
+		<p:growl id="growl" showDetail="true" sticky="false" life="3000" />
 
 			<p:toolbar style="margin-top: 20px">
 				<p:toolbarGroup>
@@ -112,16 +112,20 @@
 				<p:outputLabel id="idNovo" value="Novo" rendered="#{imovelBean.imovel.id == null}" />
 				
 				<p:outputLabel for="cep" value="CEP: " />
-				<p:inputText id="cep" value="#{imovelBean.imovel.CEP}" maxlength="9" required="true" />
+				<p:inputText id="cep" value="#{imovelBean.imovel.CEP}" maxlength="9" 
+							required="true" requiredMessage="O CEP é obrigatório."/>
 
 				<p:outputLabel for="cidade" value="Cidade: " />
-				<p:inputText id="cidade" value="#{imovelBean.imovel.cidade}" required="true"/>
+				<p:inputText id="cidade" value="#{imovelBean.imovel.cidade}" 
+							required="true" requiredMessage="Cidade é obrigatório."/>
 
 				<p:outputLabel for="bairro" value="Bairro: " />
-				<p:inputText id="bairro" value="#{imovelBean.imovel.bairro}" required="true" />
+				<p:inputText id="bairro" value="#{imovelBean.imovel.bairro}" 
+							required="true" requiredMessage="O bairro é obrigatório." />
 
 				<p:outputLabel for="endereco" value="Endereço: " />
-				<p:inputText id="endereco" value="#{imovelBean.imovel.endereco}" required="true" />
+				<p:inputText id="endereco" value="#{imovelBean.imovel.endereco}" 
+							required="true" requiredMessage="O endereço é obrigatório." />
 
 				<p:outputLabel for="numero" value="Número: " />
 				<p:inputText id="numero" value="#{imovelBean.imovel.numero}" />
@@ -138,8 +142,9 @@
 
 				<p:outputLabel for="valorAluguel" value="Valor Aluguel: " />
 				<p:inputNumber id="valorAluguel" value="#{imovelBean.imovel.valorAluguel}"
-					symbol="R$ " symbolPosition="p" decimalSeparator=","
-					thousandSeparator="." minValue="0" required="true"/>
+							symbol="R$ " symbolPosition="p" decimalSeparator=","
+							thousandSeparator="." minValue="0" 
+							required="true" requiredMessage="O valor de aluguel é obrigatório."/>
 
 				<p:outputLabel for="statusImovel" value="Status: " />
 				<p:selectOneMenu id="statusImovel" value="#{imovelBean.imovel.statusImovel}">
@@ -163,16 +168,18 @@
 	
 	<p:confirmDialog id="confirmacaoExclusaoDialog"
 				widgetVar="confirmacaoExclusao"
-				message="Tem certeza que deseja excluir o imóvel localizado em #{imovelBean.imovel.endereco}, #{imovelBean.imovel.numero}?"
+				message="Tem certeza que deseja excluir o imóvel?"
 				header="Exclusão de imóvel" severity="alert">
 				<p:button icon="pi pi-thumbs-down" value="Não"
 					onclick="PF('confirmacaoExclusao').hide(); return false;" 
 					process="@this"/>
-				<p:commandButton icon="pi pi-thumbs-up" value="Sim" 
-				    update=":formulario:imoveisTable"
-					onclick="PF('confirmacaoExclusao').hide();"
-					action="#{imovelBean.excluir}"
-					process="@this"/>
+				<p:commandButton 
+				icon="pi pi-thumbs-up" 
+				value="Sim"
+				update=":formulario:growl : formulario:imoveisTable"
+				onclick="PF('confirmacaoExclusao').hide();"
+				action="#{imovelBean.excluir}"
+				process="@this"/>
 			</p:confirmDialog>	
 
 	</h:form>

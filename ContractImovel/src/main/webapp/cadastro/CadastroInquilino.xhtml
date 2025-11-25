@@ -11,7 +11,7 @@
         <h:form id="formularioInquilino">
             <h1>Cadastro de Inquilinos</h1>
 
-            <p:growl id="growlInquilino" showDetail="false" />
+            <p:growl id="growl" showDetail="true" sticky="false" life="3000" />
 
             <p:toolbar style="margin-top: 20px">
                 <p:toolbarGroup>
@@ -82,6 +82,12 @@
                         <f:ajax event="blur" render="documentoMSG" />
                     </h:inputText>
 
+                    <h:outputLabel for="rendaMensalInquilino" value="Renda Mensal:" />
+                        <p:inputNumber id="rendaMensalInquilino" value="#{inquilinoBean.inquilino.rendaMensal}" 
+                                    minFractionDigits="2" decimalSeparator="," 
+                                    thousandSeparator="." style="width: 150px;" 
+                                    required="true" requiredMessage="Selecione uma renda mensal." />
+
                     <p:outputLabel for="telefone" value="Telefone: " />
                     <p:inputMask id="telefone" value="#{inquilinoBean.inquilino.telefone}" 
                                 mask="(99) 99999-9999" />
@@ -109,12 +115,20 @@
             </p:dialog>
 
    
-            <p:confirmDialog id="confirmacaoExclusaoInquilinoDialog" widgetVar="confirmacaoExclusaoInquilino"
+            <p:confirmDialog id="confirmacaoExclusaoInquilinoDialog" 
+                widgetVar="confirmacaoExclusaoInquilino"
                 message="Tem certeza que deseja excluir o inquilino #{inquilinoBean.inquilino.nome}?"
                 header="Exclusão de inquilino" severity="alert">
-                <p:button icon="pi pi-thumbs-down" value="Não" onclick="PF('confirmacaoExclusaoInquilino').hide(); return false;" process="@this"/>
-                <p:commandButton icon="pi pi-thumbs-up" value="Sim" update=":formularioInquilino:inquilinosTable"
-                    onclick="PF('confirmacaoExclusaoInquilino').hide();" action="#{inquilinoBean.excluir}" process="@this"/>
+                <p:button icon="pi pi-thumbs-down" value="Não" 
+                    onclick="PF('confirmacaoExclusaoInquilino').hide(); return false;" 
+                    process="@this"/>
+                <p:commandButton 
+				icon="pi pi-thumbs-up" 
+				value="Sim"
+				update=":formularioInquilino:growl :formularioInquilino:inquilinosTable"
+				onclick="PF('confirmacaoExclusaoInquilino').hide();"
+				action="#{inquilinoBean.excluir}"
+				process="@this"/>
             </p:confirmDialog>
 
         </h:form>

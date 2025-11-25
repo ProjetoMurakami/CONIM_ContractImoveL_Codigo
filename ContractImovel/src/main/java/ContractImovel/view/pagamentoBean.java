@@ -12,9 +12,11 @@ import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j;
 
 import ContractImovel.model.Pagamento;
 import ContractImovel.enums.FormasPagamento;
@@ -22,7 +24,6 @@ import ContractImovel.model.ContratoLocacao;
 import ContractImovel.service.pagamentoService;
 import ContractImovel.service.contratoLocacaoService;
 import ContractImovel.util.FacesUtil;
-@Log4j
 @Getter
 @Setter
 @Named
@@ -30,6 +31,8 @@ import ContractImovel.util.FacesUtil;
 public class pagamentoBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(pagamentoBean.class);
 
     @Inject
     private pagamentoService pagamentoService;
@@ -44,7 +47,6 @@ public class pagamentoBean implements Serializable {
 
     @PostConstruct
     public void inicializar() {
-        log.debug("init pesquisa");
         pagamentos = pagamentoService.buscarTodos();
         contratos = contratoService.buscarTodos();
         this.setPagamentos(pagamentos);
@@ -58,9 +60,6 @@ public class pagamentoBean implements Serializable {
                 Pagamento pagamentoExistente = pagamentoService.buscarPorId(pagamento.getId());
                 if (pagamentoExistente != null) {
                     this.pagamento = pagamentoExistente;
-                    System.out.println("Pagamento carregado: " + pagamentoExistente);
-                    System.out.println("Contrato do pagamento: " + (pagamentoExistente.getContratoLocacao() != null ? 
-                        pagamentoExistente.getContratoLocacao().getId() : "null"));
                 }
             } else if (contratoId != null) {
                 ContratoLocacao contrato = contratoService.buscarPorId(contratoId);
@@ -69,7 +68,6 @@ public class pagamentoBean implements Serializable {
                         pagamento = new Pagamento();
                     }
                     pagamento.setContratoLocacao(contrato);
-                    System.out.println("Contrato definido para novo pagamento: " + contrato.getId());
                 }
             } else {
                 if (pagamento == null) {
@@ -78,7 +76,6 @@ public class pagamentoBean implements Serializable {
             }
             
             carregarPagamentos();
-            
         } catch (Exception e) {
             System.err.println("Erro no onPreRender: " + e.getMessage());
             e.printStackTrace();
@@ -101,10 +98,7 @@ public class pagamentoBean implements Serializable {
 
     public void salvar() {
         try {
-            log.info("Iniciando o salvamento de pagamento: " + pagamento);
-            
             pagamentoService.salvar(pagamento);
-            log.info("Pagamento salvo com sucesso");
 
             pagamentos = pagamentoService.buscarTodos();
 
@@ -114,7 +108,7 @@ public class pagamentoBean implements Serializable {
             limpar();
 
         } catch (Exception e) {
-            log.error("Erro ao salvar ppagamento: ", e);
+            LOGGER.error("Erro ao salvar ppagamento: ", e);
             FacesContext.getCurrentInstance().addMessage(null,
                 new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
                     "Erro ao salvar pagamento: " + e.getMessage()));
@@ -123,12 +117,13 @@ public class pagamentoBean implements Serializable {
 
     public void excluir() {
         try {
-            if (pagamento != null && pagamento.getId() != null) {
-                pagamentoService.excluir(pagamento);
-                this.pagamentos = pagamentoService.buscarTodos(); 
-            } else {
-                FacesUtil.addErrorMessage("Nenhum pagamento selecionado para exclusão.");
-            }
+            pagamentoService.excluir(pagamento);
+			pagamentos = pagamentoService.buscarTodos();
+
+			FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
+                    "Inquilino excluído com sucesso."));
+                   
         } catch (Exception e) {
             e.printStackTrace();
 			FacesContext.getCurrentInstance().addMessage(null, 

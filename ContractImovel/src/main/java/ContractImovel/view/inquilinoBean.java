@@ -1,6 +1,7 @@
 package ContractImovel.view;
 
 import java.io.Serializable;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,20 +12,20 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.faces.component.UIComponent;
 import javax.faces.validator.ValidatorException;
-import javax.persistence.PersistenceException;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j;
 import ContractImovel.enums.TiposCliente;
 import ContractImovel.model.Inquilino;
 import ContractImovel.service.inquilinoService;
 import ContractImovel.util.CpfValidator;
 
-
-@Log4j
 @Getter
 @Setter
 @Named
@@ -33,6 +34,8 @@ public class inquilinoBean implements  Serializable{
 
     private static final long serialVersionUID = 1L;
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(inquilinoBean.class);
+
 	@Inject
 	private inquilinoService inquilinoService;
 	private Inquilino inquilino = new Inquilino();
@@ -40,7 +43,6 @@ public class inquilinoBean implements  Serializable{
 	
 	@PostConstruct
 	public void inicializar() {
-		log.debug("init pesquisa"); 
 		this.setInquilinos(inquilinoService.buscarTodos());
 		limpar();
 	}
@@ -54,13 +56,8 @@ public class inquilinoBean implements  Serializable{
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
 					"Inquilino salvo com sucesso."));
 			limpar();
-		} catch (PersistenceException e) {
-			log.error("Erro ao salvar inquilino", e);
-			FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao salvar",
-					"Verifique os dados e o log: " + e.getMessage()));
 		} catch (Exception e) {
-			log.error("Erro inesperado ao salvar inquilino", e);
+			LOGGER.error("Erro ao salvar inquilino", e);
 			FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
 					"Erro inesperado: " + e.getMessage()));
@@ -71,12 +68,30 @@ public class inquilinoBean implements  Serializable{
 	public void excluir() {
 		try {
 			inquilinoService.excluir(inquilino);
-			this.inquilinos = inquilinoService.buscarTodos();
+			inquilinos = inquilinoService.buscarTodos();
+
+			FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
+                    "Inquilino excluído com sucesso."));
+                    
 		} catch (Exception e) {
-			e.printStackTrace();
-			FacesContext.getCurrentInstance().addMessage(null, 
-			new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Ocorreu um problema", null));
+			LOGGER.error("Erro ao excluir inquilino", e);
+
+			String msgUser = "Erro ao excluir inquilino: " + e.getMessage();
+			
+			if (e.getCause() != null) {
+				Throwable cause = e.getCause();
+				while (cause != null) {
+					if (cause instanceof SQLIntegrityConstraintViolationException) {
+						msgUser = "Não é possível excluir este inquilino, pois ele está associado a um contrato ativo.";
+						break;
+					}
+					cause = cause.getCause();
+				}
+			}
+
+			FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", msgUser));
 		}
 	}
 		

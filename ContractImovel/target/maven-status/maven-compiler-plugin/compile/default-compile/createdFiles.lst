@@ -37,7 +37,6 @@ ContractImovel\service\pagamentoService.class
 ContractImovel\service\usuarioService.class
 ContractImovel\view\redirectBean.class
 ContractImovel\service\contratoLocacaoService.class
-ContractImovel\filter\AuthFilter.class
 ContractImovel\view\dto\FiltroImovel.class
 ContractImovel\view\imovelBean.class
 ContractImovel\util\jpa\Transactional.class

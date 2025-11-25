@@ -14,7 +14,7 @@
 
             <h1>Cadastro de Usuários</h1>
 
-            <p:growl id="growl" showDetail="false" />
+            <p:growl id="growl" showDetail="true" sticky="false" life="3000" />
 
             <p:toolbar style="margin-top: 20px">
                 <p:toolbarGroup>
@@ -124,15 +124,16 @@
                 widgetVar="confirmacaoExclusaoUsuario"
                 message="Tem certeza que deseja excluir este usuário #{usuarioBean.usuario.nome}?"    
                 header="Excluir Usuário" severity="alert">
-
-                <p:commandButton icon="pi pi-thumbs-down" value="Não"
-                    onclick="PF('confirmacaoExclusaoUsuario').hide(); return false;" />
-
-                <p:commandButton icon="pi pi-thumbs-up" value="Sim"
-                    update=":formularioUsuario:usuariosTable :formularioUsuario:growl"
-                    onclick="PF('confirmacaoExclusaoUsuario').hide();"
-                    action="#{usuarioBean.excluir}" 
+                <p:button icon="pi pi-thumbs-down" value="Não"
+                    onclick="PF('confirmacaoExclusaoUsuario').hide(); return false;"
                     process="@this"/>
+                <p:commandButton 
+                icon="pi pi-thumbs-up" 
+                value="Sim"
+                update=":formularioUsuario:usuariosTable :formularioUsuario:growl"
+                onclick="PF('confirmacaoExclusaoUsuario').hide();"
+                action="#{usuarioBean.excluir}" 
+                process="@this"/>
             </p:confirmDialog>
         </h:form>
 
