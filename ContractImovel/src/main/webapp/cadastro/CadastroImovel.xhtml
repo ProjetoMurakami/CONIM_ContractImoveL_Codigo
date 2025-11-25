@@ -18,7 +18,8 @@
 
 			<p:toolbar style="margin-top: 20px">
 				<p:toolbarGroup>
-					<p:commandButton icon="pi pi-plus" value="Novo" id="botaoNovo" 
+					<p:commandButton icon="pi pi-plus" value="Novo" id="botaoNovo"
+						action="#{imovelBean.limpar}"
 						oncomplete="PF('editarDialogWidgetVar').show()"
 		            	update="editarDialog"		            	
 		            	process="@this"/>
@@ -148,7 +149,7 @@
 
 				<p:outputLabel for="observacoes" value="Observações: " />
 				<p:inputTextarea id="observacoes" value="#{imovelBean.imovel.observacoes}" 
-					rows="3" cols="30" autoResize="true" />
+					rows="3" cols="30" autoResize="true" maxlength="500" />
 
 				<p:commandButton icon="pi pi-save" id="salvarButton"
 					value="Salvar" title="Gravar dados do imóvel"

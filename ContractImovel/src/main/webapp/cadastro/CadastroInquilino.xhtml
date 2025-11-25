@@ -16,8 +16,10 @@
             <p:toolbar style="margin-top: 20px">
                 <p:toolbarGroup>
                     <p:commandButton icon="pi pi-plus" value="Novo" id="botaoNovoInquilino"
+                        action="#{inquilinoBean.limpar}"
                         oncomplete="PF('editarInquilinoDialogWidgetVar').show()"
-                        update="editarInquilinoDialog" process="@this"/>
+                        update="editarInquilinoDialog" 
+                        process="@this"/>
                 </p:toolbarGroup>
             </p:toolbar>
 
@@ -72,21 +74,31 @@
                                  requiredMessage="Nome é obrigatório" required="true" />
 
                     <h:outputLabel for="documento" value="Documento:" />
-                    <h:inputText id="documento" value="#{inquilinoBean.inquilino.documento}" required="true">
-                    <f:ajax event="blur" render="documentoMSG" />
+                    <h:inputText id="documento"
+                                value="#{inquilinoBean.inquilino.documento}"
+                                required="true"
+                                requiredMessage="O documento é obrigatório."
+                                validator="#{inquilinoBean.validarDocumento}">
+                        <f:ajax event="blur" render="documentoMSG" />
                     </h:inputText>
 
                     <p:outputLabel for="telefone" value="Telefone: " />
-                    <p:inputMask id="telefone" value="#{inquilinoBean.inquilino.telefone}" mask="(99) 99999-9999" />
+                    <p:inputMask id="telefone" value="#{inquilinoBean.inquilino.telefone}" 
+                                mask="(99) 99999-9999" />
 
                     <p:outputLabel for="email" value="Email: " />
                     <p:inputText id="email" value="#{inquilinoBean.inquilino.email}" />
 
-                    <h:outputLabel for="tipo" value="Tipo:" />
-                    <p:selectOneMenu id="tipo" value="#{inquilinoBean.inquilino.categoria}" required="true">
-                        <f:selectItem itemLabel="Selecione um tipo" itemValue="#{null}" />
-                        <f:selectItems value="#{inquilinoBean.tiposCliente}" />
+                    <h:outputLabel for="categoria" value="Categoria:" />
+                    <p:selectOneMenu id="categoria"
+                                    value="#{inquilinoBean.inquilino.categoria}"
+                                    required="true"
+                                    requiredMessage="Selecione uma categoria.">
+                        <f:selectItem itemLabel="Selecione uma categoria" itemValue="#{null}" />
+                        <f:selectItems value="#{inquilinoBean.tiposCliente}" var="cat"
+                                    itemValue="#{cat}" itemLabel="#{inquilinoBean.labelCategoria(cat)}" />
                     </p:selectOneMenu>
+
 
                     <p:commandButton icon="pi pi-save" id="salvarInquilinoButton" value="Salvar"
                         title="Gravar dados do inquilino"

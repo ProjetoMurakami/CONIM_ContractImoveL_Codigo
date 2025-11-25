@@ -11,6 +11,8 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.faces.component.UIComponent;
+import javax.faces.validator.ValidatorException;
 import javax.persistence.PersistenceException;
 
 import lombok.Getter;
@@ -20,6 +22,7 @@ import ContractImovel.enums.TiposCliente;
 import ContractImovel.model.Inquilino;
 import ContractImovel.service.inquilinoService;
 import ContractImovel.util.CpfValidator;
+
 
 @Log4j
 @Getter
@@ -44,16 +47,6 @@ public class inquilinoBean implements  Serializable{
 	
 	public void salvar() {
 		try {
-			String cpfUnformatado = CpfValidator.unformat(inquilino.getDocumento());
-			if (!CpfValidator.isValid(cpfUnformatado)) {
-				FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF inválido",
-						"Informe um CPF válido (11 dígitos)."));
-				return; 
-			}
-
-			inquilino.setDocumento(CpfValidator.format(cpfUnformatado));
-
 			inquilinoService.salvar(inquilino); 
 			this.inquilinos = inquilinoService.buscarTodos();
 
@@ -89,6 +82,37 @@ public class inquilinoBean implements  Serializable{
 		
 	public void limpar() {
 		this.inquilino = new Inquilino();
+	}
+
+	public void validarDocumento(FacesContext ctx, UIComponent comp, Object value) {
+		String doc = CpfValidator.unformat(value.toString());
+
+		if (doc.length() == 11) {
+			if (!CpfValidator.isValidCPF(doc)) {
+				throw new ValidatorException(new FacesMessage(
+					FacesMessage.SEVERITY_ERROR,
+					"CPF inválido!", null));
+			}
+		} else if (doc.length() == 14) {
+			if (!CpfValidator.isValidCNPJ(doc)) {
+				throw new ValidatorException(new FacesMessage(
+					FacesMessage.SEVERITY_ERROR,
+					"CNPJ inválido!", null));
+			}
+		} else {
+			throw new ValidatorException(new FacesMessage(
+				FacesMessage.SEVERITY_ERROR,
+				"Documento deve conter 11 (CPF) ou 14 dígitos (CNPJ).", null));
+		}
+	}
+
+	public String labelCategoria(TiposCliente categoria) {
+		if (categoria == null) return "";
+		switch (categoria) {
+			case PESSOA_FISICA: return "Pessoa Física";
+			case PESSOA_JURIDICA: return "Pessoa Jurídica";
+			default: return categoria.name();
+		}
 	}
 
 	public List<TiposCliente> getTiposCliente() {

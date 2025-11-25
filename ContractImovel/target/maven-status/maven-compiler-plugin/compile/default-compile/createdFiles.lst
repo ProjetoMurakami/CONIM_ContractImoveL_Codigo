@@ -1,5 +1,6 @@
 ContractImovel\model\converter\localDateConverter.class
 ContractImovel\model\dao\contratoLocacaoDao.class
+ContractImovel\view\fiadorBean$1.class
 ContractImovel\enums\TiposCliente.class
 ContractImovel\model\converter\contratoConverter.class
 ContractImovel\util\jpa\EntityManagerProducer.class
@@ -12,6 +13,7 @@ ContractImovel\model\converter\inquilinoConverter.class
 ContractImovel\view\contratoLocacaoBean.class
 ContractImovel\model\converter\usuarioConverter.class
 ContractImovel\service\fiadorService.class
+ContractImovel\view\inquilinoBean$1.class
 ContractImovel\service\inquilinoService.class
 ContractImovel\model\dao\usuarioDao.class
 ContractImovel\model\Imovel.class

@@ -51,7 +51,6 @@ public class contratoLocacaoBean implements Serializable{
 
     private ContratoLocacao contrato = new ContratoLocacao();
     private Fiador fiador = new Fiador();
-    private Pagamento pagamentoSelecionado = new Pagamento(); // ✅ NOVO
 
     @PostConstruct
     public void inicializar() {
@@ -67,7 +66,6 @@ public class contratoLocacaoBean implements Serializable{
         corretores = usuarioService.listarTodos();
         contrato = new ContratoLocacao();
         fiador = new Fiador();
-        pagamentoSelecionado = new Pagamento();
     }
 
     public void carregarPagamentosDoContrato() {
@@ -85,11 +83,6 @@ public class contratoLocacaoBean implements Serializable{
         } else {
             pagamentosDoContrato = new ArrayList<>();
         }
-    }
-
-    public void selecionarPagamento(Pagamento pagamento) {
-        this.pagamentoSelecionado = pagamento;
-        log.info("Pagamento selecionado para edição: " + pagamento.getId());
     }
 
     public void salvar() {
@@ -135,12 +128,15 @@ public class contratoLocacaoBean implements Serializable{
 
     public void limpar() {
         contrato = new ContratoLocacao();
+        contrato.setCaucao(null); 
         pagamentosDoContrato = new ArrayList<>();
-        pagamentoSelecionado = new Pagamento();
     }
 
     public void setContrato(ContratoLocacao contrato) {
         try {
+            if (this.contrato.getCaucao() == null) {
+                this.contrato.setCaucao(false);
+            }
             if (contrato != null && contrato.getId() != null) {
                 this.contrato = contratoLocacaoService.buscarPorId(contrato.getId());
                 carregarPagamentosDoContrato();
@@ -155,4 +151,21 @@ public class contratoLocacaoBean implements Serializable{
                     "Erro ao carregar contrato: " + e.getMessage()));
         }
     }
+
+    public boolean isCaucaoSelecionado() {
+        return contrato != null && Boolean.FALSE.equals(contrato.getCaucao());
+    }
+
+    public void atualizarListaFiadores() {
+        try {
+            this.fiadores = fiadorService.buscarTodos();
+            log.info("Lista de fiadores atualizada. Total: " + fiadores.size());
+        } catch (Exception e) {
+            log.error("Erro ao atualizar lista de fiadores", e);
+            FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
+                    "Não foi possível atualizar a lista de fiadores: " + e.getMessage()));
+        }
+    }
+    
 }

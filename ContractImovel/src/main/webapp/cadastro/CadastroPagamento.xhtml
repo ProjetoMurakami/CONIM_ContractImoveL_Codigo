@@ -23,9 +23,11 @@
 
 			<p:toolbar style="margin-top: 20px">
 				<p:toolbarGroup>
-					<p:commandButton icon="pi pi-plus" value="Novo" id="botaoNovo" 
+					<p:commandButton icon="pi pi-plus" value="Novo" id="botaoNovo"
+						action="#{inquilinoBean.limpar}" 
 						oncomplete="PF('editarDialogWidgetVar').show()"
-		            	update="editarDialog"	process="@this"/>
+		            	update="editarDialog"	
+						process="@this"/>
 				</p:toolbarGroup>
 			</p:toolbar>
 			
