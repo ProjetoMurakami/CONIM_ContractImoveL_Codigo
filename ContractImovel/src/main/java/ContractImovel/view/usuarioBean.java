@@ -48,6 +48,7 @@ public class usuarioBean implements Serializable {
                     return;
                 }
                 usuario.setCpf(cpfLimpo);
+                usuarios = usuarioService.listarTodos();
             }
             usuarioService.salvar(usuario);
             FacesContext.getCurrentInstance().addMessage(null,
