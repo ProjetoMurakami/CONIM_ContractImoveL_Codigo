@@ -61,11 +61,13 @@ public class imovelDao implements Serializable{
 	}	
 
 	@SuppressWarnings("unchecked")
-	public List<Imovel> buscarDisponiveis(){
-		String query="SELECT i FROM Imovel i WHERE i.statusImovel = 'DISPONIVEL'";
+    public List<Imovel> buscarDisponiveis() {
 
-		Query q = manager.createQuery(query);
+        String query = "SELECT i FROM Imovel i " +
+                    "WHERE i.statusImovel = 'DISPONIVEL' " +
+                    "AND i.id NOT IN (SELECT c.imovel.id FROM ContratoLocacao c)";
+        Query q = manager.createQuery(query);
 
-		return q.getResultList();
-	}
+        return q.getResultList();
+    }
 }

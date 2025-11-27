@@ -39,4 +39,8 @@ public class inquilinoService implements Serializable {
     public List<Inquilino> buscarTodos() {
         return inquilinoDao.buscarTodos();
     }
+
+    public List<Inquilino> buscarDisponiveis(){
+        return inquilinoDao.buscarDisponiveis();
+    }
 }

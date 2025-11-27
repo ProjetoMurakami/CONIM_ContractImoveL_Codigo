@@ -79,7 +79,7 @@
                                 required="true"
                                 requiredMessage="O documento é obrigatório."
                                 validator="#{inquilinoBean.validarDocumento}">
-                        <f:ajax event="blur" render="documentoMSG" />
+                        <f:ajax event="blur"  render="msgsInquilino growl" />
                     </h:inputText>
 
                     <h:outputLabel for="rendaMensalInquilino" value="Renda Mensal:" />

@@ -60,4 +60,13 @@ public class inquilinoDao implements Serializable{
 		
 		return q.getResultList();
 	}	
+
+	@SuppressWarnings("unchecked")
+	public List<Inquilino> buscarDisponiveis(){
+		String query = "SELECT i FROM Inquilino i WHERE i.id NOT IN (SELECT c.inquilino.id FROM ContratoLocacao c)";
+
+		Query q = manager.createQuery(query);
+
+		return q.getResultList();
+	}
 }

@@ -44,7 +44,6 @@ public class contratoLocacaoBean implements Serializable{
     private usuarioService usuarioService;
 
     private List<ContratoLocacao> contratos = new ArrayList<ContratoLocacao>();
-    private List<Imovel> imoveis = new ArrayList<Imovel>();
     private List<Imovel> imoveisDisponiveis = new ArrayList<Imovel>();
     private List<Inquilino> inquilinos = new ArrayList<Inquilino>();
     private List<Fiador> fiadores = new ArrayList<Fiador>();
@@ -57,10 +56,9 @@ public class contratoLocacaoBean implements Serializable{
     @PostConstruct
     public void inicializar() {
         contratos = contratoLocacaoService.buscarTodos();
-        imoveis = imovelService.buscarTodos();
         imoveisDisponiveis = imovelService.buscarDisponiveis();
-        inquilinos = inquilinoService.buscarTodos();
-        fiadores = fiadorService.buscarTodos();
+        inquilinos = inquilinoService.buscarDisponiveis();
+        fiadores = fiadorService.buscarDisponiveis();
         corretores = usuarioService.listarTodos();
         contrato = new ContratoLocacao();
         fiador = new Fiador();
@@ -184,5 +182,10 @@ public class contratoLocacaoBean implements Serializable{
                     "Não foi possível atualizar a lista de fiadores: " + e.getMessage()));
         }
     }
+
+    public void recarregarDados() {
+        inicializar(); 
+    }
+
     
 }

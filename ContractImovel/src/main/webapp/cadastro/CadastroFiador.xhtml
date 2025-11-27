@@ -85,14 +85,15 @@
                         <p:inputText id="nomeFiador" value="#{fiadorBean.fiador.nome}" maxlength="100" 
                                     requiredMessage="Nome é obrigatório" required="true" style="width: 300px;" />
 
-                        <h:outputLabel for="documentoFiador" value="Documento: *" />
+                        <h:outputLabel for="documentoFiador" value="Documento:" />
                         <h:inputText id="documentoFiador" 
                                     value="#{fiadorBean.fiador.documento}" 
                                     required="true"
                                     requiredMessage="O documento é obrigatório."
                                     validator="#{fiadorBean.validarDocumento}">
-                            <f:ajax event="blur" render="documentoMSG" />
+                            <f:ajax event="blur" render="msgsFiador growl" />
                         </h:inputText>
+                        
 
                         <p:outputLabel for="telefoneFiador" value="Telefone:" />
                         <p:inputMask id="telefoneFiador" value="#{fiadorBean.fiador.telefone}" 
