@@ -59,4 +59,17 @@ public class fiadorDao implements Serializable{
 
         return q.getResultList();
     }
+
+    @SuppressWarnings("unchecked")
+	public List<Fiador> buscarDisponiveis(){
+		String query = "SELECT f FROM Fiador f " +
+               "WHERE f.id NOT IN (" +
+               "   SELECT c.fiador.id FROM ContratoLocacao c " +
+               "   WHERE c.fiador IS NOT NULL" +
+               ")";
+
+		Query q = manager.createQuery(query);
+
+		return q.getResultList();
+	}
 }

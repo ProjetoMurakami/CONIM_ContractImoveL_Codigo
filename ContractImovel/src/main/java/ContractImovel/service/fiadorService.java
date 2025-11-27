@@ -40,4 +40,8 @@ public class fiadorService implements Serializable {
     public List<Fiador> buscarTodos() {
         return fiadorDao.buscarTodos();
     }
+
+    public List<Fiador> buscarDisponiveis(){
+        return fiadorDao.buscarDisponiveis();
+    }
 }
