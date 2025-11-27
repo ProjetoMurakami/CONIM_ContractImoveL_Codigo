@@ -2,6 +2,7 @@ package ContractImovel.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -39,6 +40,7 @@ public class Imovel implements Serializable{
     private Integer quartos;
     private Integer banheiros;
     private Double area;
+    @Column(name = "observacoes", length = 500)
     private String observacoes;
 
     @Enumerated(EnumType.STRING) 

@@ -4,7 +4,7 @@ import ContractImovel.model.Pagamento;
 import ContractImovel.util.jpa.Transactional;
 
 import javax.inject.Inject;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
 
@@ -22,14 +22,9 @@ public class pagamentoDao implements Serializable{
     private static final Logger LOGGER = LoggerFactory.getLogger(pagamentoDao.class);
 
     @Transactional
-    public Pagamento salvar(Pagamento pagamento) {
+    public void salvar(Pagamento pagamento) {
         try {
-            if (pagamento.getId() == null) {
-                manager.persist(pagamento);
-                return pagamento;
-            } else {
-                return manager.merge(pagamento);
-            }
+            manager.merge(pagamento);
         } catch (PersistenceException e) {
             LOGGER.error("Erro no DAO ao salvar Pagamento", e);
             throw e;
@@ -38,13 +33,13 @@ public class pagamentoDao implements Serializable{
 
     @Transactional
     public void excluir(Pagamento pagamento) throws PersistenceException {
-        
         try {
-            Pagamento pag = manager.find(Pagamento.class, pagamento.getId());
-            if (pag != null) {
-                manager.remove(pag);
+            Pagamento pagamengoExcluido = manager.find(Pagamento.class, pagamento.getId());
+            if (pagamengoExcluido != null) {
+                manager.remove(pagamengoExcluido);
                 manager.flush();
-            }
+            }else
+                LOGGER.error("Pagamento a ser excluído não existe");
         } catch (PersistenceException e) {
             e.printStackTrace();
             throw e;
@@ -55,19 +50,23 @@ public class pagamentoDao implements Serializable{
         return manager.find(Pagamento.class, id);
     }
     
-    @SuppressWarnings("unchecked")
     public List<Pagamento> buscarPorContrato(Long contratoId) {
-        return manager.createQuery("FROM Pagamento p WHERE p.contratoLocacao.id = :contratoId ORDER BY p.dataVencimento")
-                     .setParameter("contratoId", contratoId)
-                     .getResultList();
+        try {
+            TypedQuery<Pagamento> query = manager.createQuery(
+                "SELECT p FROM Pagamento p WHERE p.contratoLocacao.id = :contratoId ORDER BY p.dataVencimento", 
+                Pagamento.class
+            );
+            query.setParameter("contratoId", contratoId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOGGER.error("Erro ao buscar pagamentos do contrato: " + contratoId, e);
+            return List.of();
+        }
     }
-
     @SuppressWarnings("unchecked")
     public List<Pagamento> buscarTodos() {
-        String query ="select p from Pagamento p";
-
-        Query q = manager.createQuery(query);
-
-        return q.getResultList();
+        return manager.createQuery("FROM Pagamento p ORDER BY p.dataVencimento DESC")
+                    .getResultList();
     }
+    
 }

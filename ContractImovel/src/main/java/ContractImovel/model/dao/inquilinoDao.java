@@ -22,16 +22,11 @@ public class inquilinoDao implements Serializable{
     private static final Logger LOGGER = LoggerFactory.getLogger(inquilinoDao.class);
 
     @Transactional
-	public Inquilino salvar(Inquilino inquilino) {
+	public void salvar(Inquilino inquilino) {
 		try {
-			if (inquilino.getId() == null) {
-				manager.persist(inquilino);
-				return inquilino;
-			} else {
-				return manager.merge(inquilino);
-			}
+			manager.merge(inquilino);
 		} catch (PersistenceException e) {
-			LOGGER.error("Erro no DAO ao salvar Inquilino", e);
+			LOGGER.error("Erro ao salvar Inquilino", e);
 			throw e;
 		}
 	}
@@ -41,11 +36,14 @@ public class inquilinoDao implements Serializable{
     public void excluir(Inquilino inquilino) throws PersistenceException{
 
         try {
-			Inquilino i = manager.find(Inquilino.class, inquilino.getId());
-			manager.remove(i);
-			manager.flush();
+			Inquilino inquilinoExcluido = manager.find(Inquilino.class, inquilino.getId());
+			if(inquilinoExcluido != null){
+				manager.remove(inquilinoExcluido);
+				manager.flush();
+			} else
+				LOGGER.error("Inquilino a ser excluído não existe");	
 		} catch (PersistenceException e) {
-			e.printStackTrace();
+			LOGGER.error("Erro ao excluir Inquilino ID: " + inquilino.getId(), e);
 			throw e;
 		} 
     }
@@ -62,4 +60,13 @@ public class inquilinoDao implements Serializable{
 		
 		return q.getResultList();
 	}	
+
+	@SuppressWarnings("unchecked")
+	public List<Inquilino> buscarDisponiveis(){
+		String query = "SELECT i FROM Inquilino i WHERE i.id NOT IN (SELECT c.inquilino.id FROM ContratoLocacao c)";
+
+		Query q = manager.createQuery(query);
+
+		return q.getResultList();
+	}
 }

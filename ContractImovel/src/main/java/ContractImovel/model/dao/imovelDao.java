@@ -22,12 +22,9 @@ public class imovelDao implements Serializable{
     private static final Logger LOGGER = LoggerFactory.getLogger(imovelDao.class);
 	
 	@Transactional 
-    public Imovel salvar(Imovel imovel) throws PersistenceException {
-        LOGGER.info("salvar DAO... imovel = " + imovel);
+    public void salvar(Imovel imovel) throws PersistenceException {
         try {
-            Imovel imovelSalvo = manager.merge(imovel);
-            manager.flush(); 
-            return imovelSalvo;
+            manager.merge(imovel);
         } catch (PersistenceException e) {
             LOGGER.error("Erro ao salvar imóvel", e);
             throw e;
@@ -37,12 +34,12 @@ public class imovelDao implements Serializable{
     @Transactional 
     public void excluir(Imovel imovel) throws PersistenceException {
         try {
-			LOGGER.info("Excluir DAO... imovel = " + imovel);
             Imovel imovelGerenciado = manager.find(Imovel.class, imovel.getId());
             if (imovelGerenciado != null) {
                 manager.remove(imovelGerenciado);
                 manager.flush();
-            }
+            } else
+                LOGGER.error("Imovel a ser excluído não existe");
         } catch (PersistenceException e) {
             LOGGER.error("Erro ao excluir imóvel ID: " + imovel.getId(), e);
             throw e;
@@ -64,11 +61,13 @@ public class imovelDao implements Serializable{
 	}	
 
 	@SuppressWarnings("unchecked")
-	public List<Imovel> buscarDisponiveis(){
-		String query="SELECT i FROM Imovel i WHERE i.statusImovel = 'DISPONIVEL'";
+    public List<Imovel> buscarDisponiveis() {
 
-		Query q = manager.createQuery(query);
+        String query = "SELECT i FROM Imovel i " +
+                    "WHERE i.statusImovel = 'DISPONIVEL' " +
+                    "AND i.id NOT IN (SELECT c.imovel.id FROM ContratoLocacao c)";
+        Query q = manager.createQuery(query);
 
-		return q.getResultList();
-	}
+        return q.getResultList();
+    }
 }

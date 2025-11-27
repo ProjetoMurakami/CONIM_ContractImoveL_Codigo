@@ -9,11 +9,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import ContractImovel.enums.TiposCliente;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+
+import ContractImovel.enums.TiposCliente;
 
 @Getter
 @Setter
@@ -21,6 +22,8 @@ import lombok.ToString;
 @EqualsAndHashCode(callSuper = false, onlyExplicitlyIncluded = true)
 @Entity
 public class Fiador implements Serializable{
+    private static final long serialVersionUID = 1L;
+
     @EqualsAndHashCode.Include
 	@ToString.Include
 	@Id
@@ -35,7 +38,7 @@ public class Fiador implements Serializable{
     private String bairro;
     private String endereco;
     private String numero;
-    private double rendaMensal;
+    private Double rendaMensal;
     private String observacoes;
     
     @Enumerated(EnumType.STRING) 

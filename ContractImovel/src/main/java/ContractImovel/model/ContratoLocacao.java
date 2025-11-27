@@ -33,6 +33,7 @@ public class ContratoLocacao implements Serializable{
     private LocalDate dataInicio;
     private LocalDate dataFinal;
     private Double valorAluguel;
+    private Boolean caucao;
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "imovel_id", nullable = false)
@@ -48,6 +49,7 @@ public class ContratoLocacao implements Serializable{
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "corretor_id")
-    private Usuario usuario;
-    
+    private Usuario corretor;
+
+
 }

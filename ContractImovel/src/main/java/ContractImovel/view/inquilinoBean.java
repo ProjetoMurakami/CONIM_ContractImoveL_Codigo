@@ -1,6 +1,7 @@
 package ContractImovel.view;
 
 import java.io.Serializable;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,17 +12,20 @@ import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.persistence.PersistenceException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.faces.component.UIComponent;
+import javax.faces.validator.ValidatorException;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.extern.log4j.Log4j;
 import ContractImovel.enums.TiposCliente;
 import ContractImovel.model.Inquilino;
 import ContractImovel.service.inquilinoService;
 import ContractImovel.util.CpfValidator;
 
-@Log4j
 @Getter
 @Setter
 @Named
@@ -30,6 +34,8 @@ public class inquilinoBean implements  Serializable{
 
     private static final long serialVersionUID = 1L;
 	
+	private static final Logger LOGGER = LoggerFactory.getLogger(inquilinoBean.class);
+
 	@Inject
 	private inquilinoService inquilinoService;
 	private Inquilino inquilino = new Inquilino();
@@ -37,23 +43,12 @@ public class inquilinoBean implements  Serializable{
 	
 	@PostConstruct
 	public void inicializar() {
-		log.debug("init pesquisa"); 
 		this.setInquilinos(inquilinoService.buscarTodos());
 		limpar();
 	}
 	
 	public void salvar() {
 		try {
-			String cpfUnformatado = CpfValidator.unformat(inquilino.getDocumento());
-			if (!CpfValidator.isValid(cpfUnformatado)) {
-				FacesContext.getCurrentInstance().addMessage(null,
-					new FacesMessage(FacesMessage.SEVERITY_ERROR, "CPF inválido",
-						"Informe um CPF válido (11 dígitos)."));
-				return; 
-			}
-
-			inquilino.setDocumento(CpfValidator.format(cpfUnformatado));
-
 			inquilinoService.salvar(inquilino); 
 			this.inquilinos = inquilinoService.buscarTodos();
 
@@ -61,13 +56,8 @@ public class inquilinoBean implements  Serializable{
 				new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
 					"Inquilino salvo com sucesso."));
 			limpar();
-		} catch (PersistenceException e) {
-			log.error("Erro ao salvar inquilino", e);
-			FacesContext.getCurrentInstance().addMessage(null,
-				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro ao salvar",
-					"Verifique os dados e o log: " + e.getMessage()));
 		} catch (Exception e) {
-			log.error("Erro inesperado ao salvar inquilino", e);
+			LOGGER.error("Erro ao salvar inquilino", e);
 			FacesContext.getCurrentInstance().addMessage(null,
 				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro",
 					"Erro inesperado: " + e.getMessage()));
@@ -78,17 +68,66 @@ public class inquilinoBean implements  Serializable{
 	public void excluir() {
 		try {
 			inquilinoService.excluir(inquilino);
-			this.inquilinos = inquilinoService.buscarTodos();
+			inquilinos = inquilinoService.buscarTodos();
+
+			FacesContext.getCurrentInstance().addMessage(null,
+                new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso",
+                    "Inquilino excluído com sucesso."));
+                    
 		} catch (Exception e) {
-			e.printStackTrace();
-			FacesContext.getCurrentInstance().addMessage(null, 
-			new FacesMessage(FacesMessage.SEVERITY_ERROR,
-					"Ocorreu um problema", null));
+			LOGGER.error("Erro ao excluir inquilino", e);
+
+			String msgUser = "Erro ao excluir inquilino: " + e.getMessage();
+			
+			if (e.getCause() != null) {
+				Throwable cause = e.getCause();
+				while (cause != null) {
+					if (cause instanceof SQLIntegrityConstraintViolationException) {
+						msgUser = "Não é possível excluir este inquilino, pois ele está associado a um contrato ativo.";
+						break;
+					}
+					cause = cause.getCause();
+				}
+			}
+
+			FacesContext.getCurrentInstance().addMessage(null,
+				new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", msgUser));
 		}
 	}
 		
 	public void limpar() {
 		this.inquilino = new Inquilino();
+	}
+
+	public void validarDocumento(FacesContext ctx, UIComponent comp, Object value) {
+		String doc = CpfValidator.unformat(value.toString());
+
+		if (doc.length() == 11) {
+			if (!CpfValidator.isValidCPF(doc)) {
+				throw new ValidatorException(new FacesMessage(
+					FacesMessage.SEVERITY_ERROR,
+					"CPF inválido!", null));
+			}
+		} else if (doc.length() == 14) {
+			if (!CpfValidator.isValidCNPJ(doc)) {
+				throw new ValidatorException(new FacesMessage(
+					FacesMessage.SEVERITY_ERROR,
+					"CNPJ inválido!", null));
+			}
+		} else {
+			throw new ValidatorException(new FacesMessage(
+				FacesMessage.SEVERITY_ERROR,
+				"Documento deve conter 11 (CPF) ou 14 dígitos (CNPJ).", null));
+		}
+	}
+
+	public String labelCategoria(TiposCliente categoria) {
+		if (categoria == null) return "";
+		switch (categoria) {
+			case PESSOA_FISICA: return "Pessoa Física";
+			case PESSOA_JURIDICA: return "Pessoa Jurídica";
+			default: return categoria.name();
+		}
 	}
 
 	public List<TiposCliente> getTiposCliente() {

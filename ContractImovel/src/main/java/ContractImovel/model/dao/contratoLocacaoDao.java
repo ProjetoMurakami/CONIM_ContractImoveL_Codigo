@@ -22,27 +22,26 @@ public class contratoLocacaoDao implements Serializable{
     private static final Logger LOGGER = LoggerFactory.getLogger(contratoLocacaoDao.class);
 
     @Transactional
-    public ContratoLocacao salvar(ContratoLocacao contratoLocacao) throws PersistenceException {
-
-        LOGGER.info("Salvar DAO... Contrato = " + contratoLocacao);
-
+    public void salvar(ContratoLocacao contratoLocacao) throws PersistenceException {
         try {
-            return manager.merge(contratoLocacao);
+            manager.merge(contratoLocacao);
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOGGER.error("Erro ao salvar Contrato", e);
             throw e;
         }
     }
 
     @Transactional
     public void excluir(ContratoLocacao contratoLocacao) throws PersistenceException {
-        
         try{
-            ContratoLocacao c = manager.find(ContratoLocacao.class, contratoLocacao.getId());
-            manager.remove(c);
-            manager.flush();
+            ContratoLocacao contratoExcluir = manager.find(ContratoLocacao.class, contratoLocacao.getId());
+            if(contratoExcluir  != null){
+                manager.remove(contratoExcluir);
+                manager.flush();
+            } else
+                LOGGER.error("Contrato a ser excluído não existe");
         } catch (PersistenceException e){
-            e.printStackTrace();
+            LOGGER.error("Erro ao excluir Contrato ID: " + contratoLocacao.getId(), e);
             throw e;
         }
     }
@@ -56,7 +55,8 @@ public class contratoLocacaoDao implements Serializable{
         String query = "SELECT c FROM ContratoLocacao c " +
                     "LEFT JOIN FETCH c.imovel " +
                     "LEFT JOIN FETCH c.inquilino " +
-                    "LEFT JOIN FETCH c.fiador";
+                    "LEFT JOIN FETCH c.fiador " +
+                    "LEFT JOIN FETCH c.corretor";
         
         Query q = manager.createQuery(query);
         return q.getResultList();

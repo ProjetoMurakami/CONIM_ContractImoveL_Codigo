@@ -13,7 +13,8 @@
             <p:inputText id="usuario" value="#{loginBean.username}" placeholder="Usuário" required="true" style="width:100%;"/>
             <p:password id="senha" value="#{loginBean.senha}" placeholder="Senha" required="true" style="width:100%;"/>
 
-            <p:commandButton value="Entrar" action="#{loginBean.login}" icon="pi pi-sign-in" style="width:100%; margin-top:1rem;"/>
+           <p:commandButton value="Entrar" action="#{loginBean.login}" icon="pi pi-sign-in"
+            style="width:100%; margin-top:1rem;"    update="@form"  process="@form" />
         </p:panel>
     </h:form>
 </h:body>
