@@ -4,12 +4,17 @@ import ContractImovel.model.Inquilino;
 import ContractImovel.model.dao.inquilinoDao;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.util.List;
 public class inquilinoService implements Serializable {
     
     private static final long serialVersionUID = 1L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(inquilinoService.class);
     
     @Inject
     private inquilinoDao inquilinoDao;
@@ -18,22 +23,24 @@ public class inquilinoService implements Serializable {
         try {
             return inquilinoDao.buscarPeloCodigo(id);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Erro ao buscar pelo id de inquilino: " + id, e);
             return null;
         }
     }
 
-    @Transactional
-    public Inquilino salvar(Inquilino inquilino) {
-        return inquilinoDao.salvar(inquilino);
+    public void salvar(Inquilino inquilino) {
+        inquilinoDao.salvar(inquilino);
     }
 
-    @Transactional
     public void excluir(Inquilino inquilino) {
         inquilinoDao.excluir(inquilino);
     }
 
     public List<Inquilino> buscarTodos() {
         return inquilinoDao.buscarTodos();
+    }
+
+    public List<Inquilino> buscarDisponiveis(){
+        return inquilinoDao.buscarDisponiveis();
     }
 }

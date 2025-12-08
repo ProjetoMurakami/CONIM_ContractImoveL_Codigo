@@ -1,6 +1,13 @@
 package ContractImovel.model.dao;
 
 import ContractImovel.model.Pagamento;
+import ContractImovel.util.jpa.Transactional;
+
+import javax.inject.Inject;
+import javax.persistence.TypedQuery;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,36 +23,10 @@ public class pagamentoDao implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(pagamentoDao.class);
 
-    private static final EntityManagerFactory factory =
-            Persistence.createEntityManagerFactory("testePU");
-
-    private EntityManager getEntityManager() {
-        return factory.createEntityManager();
-    }
-
-    // ------------------------------------
-    // SALVAR
-    // ------------------------------------
-    public Pagamento salvar(Pagamento pagamento) {
-
-        LOGGER.info("Salvar DAO... Pagamento = " + pagamento);
-
-        EntityManager em = getEntityManager();
-
+    @Transactional
+    public void salvar(Pagamento pagamento) {
         try {
-            em.getTransaction().begin();
-
-            Pagamento salvo;
-            if (pagamento.getId() == null) {
-                em.persist(pagamento);
-                salvo = pagamento;
-            } else {
-                salvo = em.merge(pagamento);
-            }
-
-            em.getTransaction().commit();
-            return salvo;
-
+            manager.merge(pagamento);
         } catch (PersistenceException e) {
             LOGGER.error("Erro ao salvar Pagamento", e);
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -56,22 +37,15 @@ public class pagamentoDao implements Serializable {
         }
     }
 
-    // ------------------------------------
-    // EXCLUIR
-    // ------------------------------------
-    public void excluir(Pagamento pagamento) {
-        EntityManager em = getEntityManager();
-
+    @Transactional
+    public void excluir(Pagamento pagamento) throws PersistenceException {
         try {
-            em.getTransaction().begin();
-
-            Pagamento pag = em.find(Pagamento.class, pagamento.getId());
-            if (pag != null) {
-                em.remove(pag);
-            }
-
-            em.getTransaction().commit();
-
+            Pagamento pagamengoExcluido = manager.find(Pagamento.class, pagamento.getId());
+            if (pagamengoExcluido != null) {
+                manager.remove(pagamengoExcluido);
+                manager.flush();
+            }else
+                LOGGER.error("Pagamento a ser excluído não existe");
         } catch (PersistenceException e) {
             LOGGER.error("Erro ao excluir Pagamento ID: " + pagamento.getId(), e);
             if (em.getTransaction().isActive()) em.getTransaction().rollback();
@@ -93,35 +67,24 @@ public class pagamentoDao implements Serializable {
             em.close();
         }
     }
-
-    // ------------------------------------
-    // BUSCAR POR CONTRATO
-    // ------------------------------------
-    @SuppressWarnings("unchecked")
+    
     public List<Pagamento> buscarPorContrato(Long contratoId) {
-        EntityManager em = getEntityManager();
         try {
-            return em.createQuery(
-                    "FROM Pagamento p WHERE p.contratoLocacao.id = :contratoId ORDER BY p.dataVencimento"
-            )
-            .setParameter("contratoId", contratoId)
-            .getResultList();
-
-        } finally {
-            em.close();
+            TypedQuery<Pagamento> query = manager.createQuery(
+                "SELECT p FROM Pagamento p WHERE p.contratoLocacao.id = :contratoId ORDER BY p.dataVencimento", 
+                Pagamento.class
+            );
+            query.setParameter("contratoId", contratoId);
+            return query.getResultList();
+        } catch (Exception e) {
+            LOGGER.error("Erro ao buscar pagamentos do contrato: " + contratoId, e);
+            return List.of();
         }
     }
-
-    // ------------------------------------
-    // BUSCAR TODOS
-    // ------------------------------------
     @SuppressWarnings("unchecked")
     public List<Pagamento> buscarTodos() {
-        EntityManager em = getEntityManager();
-        try {
-            return em.createQuery("SELECT p FROM Pagamento p").getResultList();
-        } finally {
-            em.close();
-        }
+        return manager.createQuery("FROM Pagamento p ORDER BY p.dataVencimento DESC")
+                    .getResultList();
     }
+    
 }

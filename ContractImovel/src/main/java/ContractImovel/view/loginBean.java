@@ -36,27 +36,43 @@ public class loginBean implements Serializable {
 
     public void login() {
         LOGGER.log(Level.INFO, "Tentando login para usuário: {0}", username);
+
         try {
             usuarioLogado = usuarioService.autenticar(username, senha);
 
             if (usuarioLogado != null) {
                 LOGGER.log(Level.INFO, "Login bem-sucedido! Usuário: {0}, Role: {1}",
                         new Object[]{usuarioLogado.getUsername(), usuarioLogado.getRole()});
-                FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("usuarioLogado", usuarioLogado); // <<< ADICIONE
+
+                FacesContext.getCurrentInstance().getExternalContext()
+                        .getSessionMap().put("usuarioLogado", usuarioLogado);
+
                 FacesContext.getCurrentInstance().addMessage(null,
                         new FacesMessage(FacesMessage.SEVERITY_INFO, "Login realizado com sucesso!", null));
+
                 redirecionar("/index.xhtml");
+
             } else {
-                LOGGER.warning("Falha no login: credenciais inválidas.");
+                LOGGER.log(Level.INFO, "Falha no login: credenciais inválidas: {0}.", senha);
+
                 FacesContext.getCurrentInstance().addMessage(null,
-                        new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário ou senha inválidos!", null));
+                        new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                                "Usuário ou senha inválidos!", null));
+
+                FacesContext.getCurrentInstance().validationFailed();
             }
+
         } catch (Exception e) {
             LOGGER.log(Level.SEVERE, "Erro ao tentar login", e);
+
             FacesContext.getCurrentInstance().addMessage(null,
-                    new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro interno ao tentar login!", null));
+                    new FacesMessage(FacesMessage.SEVERITY_ERROR,
+                            "Erro interno ao tentar login!", null));
+
+            FacesContext.getCurrentInstance().validationFailed();
         }
     }
+
 
     public String logout() {
         LOGGER.info("Logout executado.");
@@ -72,4 +88,9 @@ public class loginBean implements Serializable {
             LOGGER.log(Level.SEVERE, "Erro ao redirecionar", e);
         }
     }
+
+    public boolean isAdmin() {
+        return usuarioLogado != null && "ADMINISTRADOR".equals(usuarioLogado.getRole().toString());
+    }
+
 }

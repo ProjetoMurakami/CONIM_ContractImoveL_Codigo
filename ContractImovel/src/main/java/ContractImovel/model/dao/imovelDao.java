@@ -17,15 +17,14 @@ public class imovelDao implements Serializable {
         return factory.createEntityManager();
     }
 
-    public Imovel salvar(Imovel imovel) {
-        EntityManager manager = getManager();
+    private static final Logger LOGGER = LoggerFactory.getLogger(imovelDao.class);
+	
+	@Transactional 
+    public void salvar(Imovel imovel) throws PersistenceException {
         try {
-            manager.getTransaction().begin();
-            Imovel salvo = manager.merge(imovel);
-            manager.getTransaction().commit();
-            return salvo;
-        } catch (Exception e) {
-            manager.getTransaction().rollback();
+            manager.merge(imovel);
+        } catch (PersistenceException e) {
+            LOGGER.error("Erro ao salvar imóvel", e);
             throw e;
         } finally {
             manager.close();
@@ -35,48 +34,38 @@ public class imovelDao implements Serializable {
     public void excluir(Imovel imovel) {
         EntityManager manager = getManager();
         try {
-            manager.getTransaction().begin();
-            Imovel gerenciado = manager.find(Imovel.class, imovel.getId());
-            if (gerenciado != null) {
-                manager.remove(gerenciado);
-            }
-            manager.getTransaction().commit();
-        } catch (Exception e) {
-            manager.getTransaction().rollback();
+            Imovel imovelGerenciado = manager.find(Imovel.class, imovel.getId());
+            if (imovelGerenciado != null) {
+                manager.remove(imovelGerenciado);
+                manager.flush();
+            } else
+                LOGGER.error("Imovel a ser excluído não existe");
+        } catch (PersistenceException e) {
+            LOGGER.error("Erro ao excluir imóvel ID: " + imovel.getId(), e);
             throw e;
         } finally {
             manager.close();
         }
     }
 
-    public Imovel buscarPeloCodigo(Long id) {
-        EntityManager manager = getManager();
-        try {
-            return manager.find(Imovel.class, id);
-        } finally {
-            manager.close();
-        }
-    }
+	@SuppressWarnings("unchecked")
+	public List<Imovel> buscarTodos() {
+		
+		String query="select i from Imovel i";
+		
+		Query q = manager.createQuery(query);
+		
+		return q.getResultList();
+	}	
 
-    public List<Imovel> buscarTodos() {
-        EntityManager manager = getManager();
-        try {
-            return manager.createQuery("select i from Imovel i", Imovel.class)
-                    .getResultList();
-        } finally {
-            manager.close();
-        }
-    }
-
+	@SuppressWarnings("unchecked")
     public List<Imovel> buscarDisponiveis() {
-        EntityManager manager = getManager();
-        try {
-            return manager.createQuery(
-                    "select i from Imovel i where i.statusImovel = 'DISPONIVEL'", 
-                    Imovel.class
-            ).getResultList();
-        } finally {
-            manager.close();
-        }
+
+        String query = "SELECT i FROM Imovel i " +
+                    "WHERE i.statusImovel = 'DISPONIVEL' " +
+                    "AND i.id NOT IN (SELECT c.imovel.id FROM ContratoLocacao c)";
+        Query q = manager.createQuery(query);
+
+        return q.getResultList();
     }
 }

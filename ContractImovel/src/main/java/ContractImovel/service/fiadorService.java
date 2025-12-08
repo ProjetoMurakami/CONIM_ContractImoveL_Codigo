@@ -4,13 +4,18 @@ import ContractImovel.model.Fiador;
 import ContractImovel.model.dao.fiadorDao;
 
 import javax.inject.Inject;
-import javax.transaction.Transactional;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.util.List;
 
 public class fiadorService implements Serializable {
     
     private static final long serialVersionUID = 1L;
+    
+    private static final Logger LOGGER = LoggerFactory.getLogger(fiadorService.class);
     
     @Inject
     private fiadorDao fiadorDao;
@@ -19,22 +24,24 @@ public class fiadorService implements Serializable {
         try {
             return fiadorDao.buscarPeloCodigo(id);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Erro ao buscar pelo id de Fiador: " + id, e);
             return null;
         }
     }
 
-    @Transactional
-    public Fiador salvar(Fiador fiador) {
-        return fiadorDao.salvar(fiador);
+    public void salvar(Fiador fiador) {
+        fiadorDao.salvar(fiador);
     }
 
-    @Transactional
     public void excluir(Fiador fiador) {
         fiadorDao.excluir(fiador);
     }
 
     public List<Fiador> buscarTodos() {
         return fiadorDao.buscarTodos();
+    }
+
+    public List<Fiador> buscarDisponiveis(){
+        return fiadorDao.buscarDisponiveis();
     }
 }

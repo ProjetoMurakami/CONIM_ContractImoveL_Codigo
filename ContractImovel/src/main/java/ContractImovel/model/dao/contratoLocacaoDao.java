@@ -16,29 +16,12 @@ public class contratoLocacaoDao implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(contratoLocacaoDao.class);
 
-    private static final EntityManagerFactory factory =
-            Persistence.createEntityManagerFactory("testePU");
-
-    private EntityManager getEntityManager() {
-        return factory.createEntityManager();
-    }
-
-    // ------------------------------
-    // SALVAR
-    // ------------------------------
-    public ContratoLocacao salvar(ContratoLocacao contratoLocacao) {
-        LOGGER.info("Salvar DAO... Contrato = " + contratoLocacao);
-
-        EntityManager em = getEntityManager();
+    @Transactional
+    public void salvar(ContratoLocacao contratoLocacao) throws PersistenceException {
         try {
-            em.getTransaction().begin();
-            ContratoLocacao salvo = em.merge(contratoLocacao);
-            em.getTransaction().commit();
-            return salvo;
-
-        } catch (Exception e) {
-            LOGGER.error("Erro ao salvar contrato", e);
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            manager.merge(contratoLocacao);
+        } catch (PersistenceException e) {
+            LOGGER.error("Erro ao salvar Contrato", e);
             throw e;
 
         } finally {
@@ -46,24 +29,17 @@ public class contratoLocacaoDao implements Serializable {
         }
     }
 
-    // ------------------------------
-    // EXCLUIR
-    // ------------------------------
-    public void excluir(ContratoLocacao contratoLocacao) {
-        EntityManager em = getEntityManager();
-        try {
-            em.getTransaction().begin();
-
-            ContratoLocacao c = em.find(ContratoLocacao.class, contratoLocacao.getId());
-            if (c != null) {
-                em.remove(c);
-            }
-
-            em.getTransaction().commit();
-
-        } catch (Exception e) {
-            LOGGER.error("Erro ao excluir contrato ID: " + contratoLocacao.getId(), e);
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+    @Transactional
+    public void excluir(ContratoLocacao contratoLocacao) throws PersistenceException {
+        try{
+            ContratoLocacao contratoExcluir = manager.find(ContratoLocacao.class, contratoLocacao.getId());
+            if(contratoExcluir  != null){
+                manager.remove(contratoExcluir);
+                manager.flush();
+            } else
+                LOGGER.error("Contrato a ser excluído não existe");
+        } catch (PersistenceException e){
+            LOGGER.error("Erro ao excluir Contrato ID: " + contratoLocacao.getId(), e);
             throw e;
 
         } finally {
@@ -95,12 +71,10 @@ public class contratoLocacaoDao implements Serializable {
             String query = "SELECT c FROM ContratoLocacao c " +
                     "LEFT JOIN FETCH c.imovel " +
                     "LEFT JOIN FETCH c.inquilino " +
-                    "LEFT JOIN FETCH c.fiador";
-
-            return em.createQuery(query).getResultList();
-
-        } finally {
-            em.close();
-        }
+                    "LEFT JOIN FETCH c.fiador " +
+                    "LEFT JOIN FETCH c.corretor";
+        
+        Query q = manager.createQuery(query);
+        return q.getResultList();
     }
 }

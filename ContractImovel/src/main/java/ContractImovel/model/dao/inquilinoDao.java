@@ -16,43 +16,31 @@ public class inquilinoDao implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(inquilinoDao.class);
 
-    private static final EntityManagerFactory factory =
-            Persistence.createEntityManagerFactory("testePU");
+    @Transactional
+	public void salvar(Inquilino inquilino) {
+		try {
+			manager.merge(inquilino);
+		} catch (PersistenceException e) {
+			LOGGER.error("Erro ao salvar Inquilino", e);
+			throw e;
+		}
+	}
 
-    private EntityManager getEntityManager() {
-        return factory.createEntityManager();
-    }
 
-    // ------------------------------
-    // SALVAR
-    // ------------------------------
-    public Inquilino salvar(Inquilino inquilino) {
-        LOGGER.info("Salvar DAO... Inquilino = " + inquilino);
-
-        EntityManager em = getEntityManager();
+    @Transactional
+    public void excluir(Inquilino inquilino) throws PersistenceException{
 
         try {
-            em.getTransaction().begin();
-
-            Inquilino salvo;
-            if (inquilino.getId() == null) {
-                em.persist(inquilino);
-                salvo = inquilino;
-            } else {
-                salvo = em.merge(inquilino);
-            }
-
-            em.getTransaction().commit();
-            return salvo;
-
-        } catch (Exception e) {
-            LOGGER.error("Erro ao salvar inquilino", e);
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
-            throw e;
-
-        } finally {
-            em.close();
-        }
+			Inquilino inquilinoExcluido = manager.find(Inquilino.class, inquilino.getId());
+			if(inquilinoExcluido != null){
+				manager.remove(inquilinoExcluido);
+				manager.flush();
+			} else
+				LOGGER.error("Inquilino a ser excluído não existe");	
+		} catch (PersistenceException e) {
+			LOGGER.error("Erro ao excluir Inquilino ID: " + inquilino.getId(), e);
+			throw e;
+		} 
     }
 
     // ------------------------------
@@ -85,26 +73,24 @@ public class inquilinoDao implements Serializable {
     // BUSCAR POR ID
     // ------------------------------
     public Inquilino buscarPeloCodigo(Long id) {
-        EntityManager em = getEntityManager();
-        try {
-            return em.find(Inquilino.class, id);
-        } finally {
-            em.close();
-        }
-    }
+		return manager.find(Inquilino.class, id);
+	}
 
-    // ------------------------------
-    // BUSCAR TODOS
-    // ------------------------------
-    @SuppressWarnings("unchecked")
-    public List<Inquilino> buscarTodos() {
-        EntityManager em = getEntityManager();
-        try {
-            String query = "SELECT i FROM Inquilino i";
-            return em.createQuery(query).getResultList();
+     @SuppressWarnings("unchecked")
+     public List<Inquilino> buscarTodos() {
+		String query="select i from Inquilino i";
+		
+		Query q = manager.createQuery(query);
+		
+		return q.getResultList();
+	}	
 
-        } finally {
-            em.close();
-        }
-    }
+	@SuppressWarnings("unchecked")
+	public List<Inquilino> buscarDisponiveis(){
+		String query = "SELECT i FROM Inquilino i WHERE i.id NOT IN (SELECT c.inquilino.id FROM ContratoLocacao c)";
+
+		Query q = manager.createQuery(query);
+
+		return q.getResultList();
+	}
 }
