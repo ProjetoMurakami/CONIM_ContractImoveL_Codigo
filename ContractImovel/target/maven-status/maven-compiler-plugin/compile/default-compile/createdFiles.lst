@@ -8,6 +8,7 @@ ContractImovel\model\dao\pagamentoDao.class
 ContractImovel\model\converter\fiadorConverter.class
 ContractImovel\model\dao\imovelDao.class
 ContractImovel\view\usuarioBean.class
+ContractImovel\util\jpa\JPAUtil.class
 ContractImovel\util\CpfValidator.class
 ContractImovel\model\converter\inquilinoConverter.class
 ContractImovel\view\contratoLocacaoBean.class
