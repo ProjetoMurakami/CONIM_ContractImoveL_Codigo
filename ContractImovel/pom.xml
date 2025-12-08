@@ -38,7 +38,7 @@
                 <goal>copy-resources</goal>
               </goals>
               <configuration>
-                <outputDirectory>C:\Program Files\Apache Software Foundation\Tomcat 9.0\webapps</outputDirectory>
+                <outputDirectory>/target</outputDirectory>
                 <resources>
                   <resource>
                     <directory>/target</directory>
