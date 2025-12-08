@@ -3,21 +3,16 @@ package ContractImovel.model.dao;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
 
+import ContractImovel.model.Inquilino;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import ContractImovel.model.Inquilino;
-import ContractImovel.util.jpa.Transactional;
-
-public class inquilinoDao implements Serializable{
+public class inquilinoDao implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Inject
-    private EntityManager manager;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(inquilinoDao.class);
 
@@ -48,6 +43,35 @@ public class inquilinoDao implements Serializable{
 		} 
     }
 
+    // ------------------------------
+    // EXCLUIR
+    // ------------------------------
+    public void excluir(Inquilino inquilino) {
+        EntityManager em = getEntityManager();
+
+        try {
+            em.getTransaction().begin();
+
+            Inquilino i = em.find(Inquilino.class, inquilino.getId());
+            if (i != null) {
+                em.remove(i);
+            }
+
+            em.getTransaction().commit();
+
+        } catch (Exception e) {
+            LOGGER.error("Erro ao excluir inquilino ID: " + inquilino.getId(), e);
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            throw e;
+
+        } finally {
+            em.close();
+        }
+    }
+
+    // ------------------------------
+    // BUSCAR POR ID
+    // ------------------------------
     public Inquilino buscarPeloCodigo(Long id) {
 		return manager.find(Inquilino.class, id);
 	}

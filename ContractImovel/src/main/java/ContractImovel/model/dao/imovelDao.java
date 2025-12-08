@@ -1,23 +1,21 @@
 package ContractImovel.model.dao;
 
+import ContractImovel.model.Imovel;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
+public class imovelDao implements Serializable {
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import ContractImovel.model.Imovel;
-import ContractImovel.util.jpa.Transactional;
-
-public class imovelDao implements Serializable{
     private static final long serialVersionUID = 1L;
-    @Inject
-    private EntityManager manager;
+
+    private static EntityManagerFactory factory = 
+            Persistence.createEntityManagerFactory("testePU");
+
+    private EntityManager getManager() {
+        return factory.createEntityManager();
+    }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(imovelDao.class);
 	
@@ -28,11 +26,13 @@ public class imovelDao implements Serializable{
         } catch (PersistenceException e) {
             LOGGER.error("Erro ao salvar imóvel", e);
             throw e;
+        } finally {
+            manager.close();
         }
     }
-    
-    @Transactional 
-    public void excluir(Imovel imovel) throws PersistenceException {
+
+    public void excluir(Imovel imovel) {
+        EntityManager manager = getManager();
         try {
             Imovel imovelGerenciado = manager.find(Imovel.class, imovel.getId());
             if (imovelGerenciado != null) {
@@ -43,12 +43,10 @@ public class imovelDao implements Serializable{
         } catch (PersistenceException e) {
             LOGGER.error("Erro ao excluir imóvel ID: " + imovel.getId(), e);
             throw e;
+        } finally {
+            manager.close();
         }
     }
-	
-	public Imovel buscarPeloCodigo(Long id) {
-		return manager.find(Imovel.class, id);
-	}
 
 	@SuppressWarnings("unchecked")
 	public List<Imovel> buscarTodos() {

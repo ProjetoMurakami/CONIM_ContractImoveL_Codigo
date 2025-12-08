@@ -11,13 +11,15 @@ import javax.persistence.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceException;
 import java.io.Serializable;
 import java.util.List;
 
-public class pagamentoDao implements Serializable{
+public class pagamentoDao implements Serializable {
     private static final long serialVersionUID = 1L;
-    @Inject
-    private EntityManager manager;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(pagamentoDao.class);
 
@@ -26,8 +28,12 @@ public class pagamentoDao implements Serializable{
         try {
             manager.merge(pagamento);
         } catch (PersistenceException e) {
-            LOGGER.error("Erro no DAO ao salvar Pagamento", e);
+            LOGGER.error("Erro ao salvar Pagamento", e);
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
             throw e;
+
+        } finally {
+            em.close();
         }
     }
 
@@ -41,13 +47,25 @@ public class pagamentoDao implements Serializable{
             }else
                 LOGGER.error("Pagamento a ser excluído não existe");
         } catch (PersistenceException e) {
-            e.printStackTrace();
+            LOGGER.error("Erro ao excluir Pagamento ID: " + pagamento.getId(), e);
+            if (em.getTransaction().isActive()) em.getTransaction().rollback();
             throw e;
+
+        } finally {
+            em.close();
         }
     }
 
+    // ------------------------------------
+    // BUSCAR POR ID
+    // ------------------------------------
     public Pagamento buscarPorId(Long id) {
-        return manager.find(Pagamento.class, id);
+        EntityManager em = getEntityManager();
+        try {
+            return em.find(Pagamento.class, id);
+        } finally {
+            em.close();
+        }
     }
     
     public List<Pagamento> buscarPorContrato(Long contratoId) {

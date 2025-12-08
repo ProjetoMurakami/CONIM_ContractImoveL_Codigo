@@ -5,34 +5,83 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
 
 	<persistence-unit name="testePU" transaction-type="RESOURCE_LOCAL">
+	<provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-		<properties>
-			<!-- String de conexão com o BD -->
-			<property name="javax.persistence.jdbc.url"
-				value="jdbc:mysql://localhost:3306/locacao"/>
-			<property name="javax.persistence.jdbc.user" value="developer" />
-			<property name="javax.persistence.jdbc.password" value="ifspifsp" />
-			<property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver" />
-			
-			<!--  Configuração do hibernate JPA -->			
-			<!-- validate | update | create | create-drop -->			
-			<property name="hibernate.hbm2ddl.auto" value="update"/>
-			<property name="hibernate.show_sql" value="false"/>
-			<property name="hibernate.format_sql" value="true"/>
-			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect" /> 
-			<property name="hibernate.jdbc.time_zone" value="UTC"/>	
-			
-			
-			<!-- configuração do  pool de conexões -->
-			<property name="hibernate.c3p0.initialPoolSize" value="5"/>
-			<property name="hibernate.c3p0.minPoolSize" value="5" />
-			<property name="hibernate.c3p0.maxPoolSize" value="50" />
-			<property name="hibernate.c3p0.maxIdleTime" value="3600" />					
-			<property name="hibernate.c3p0.testConnectionOnCheckout" value="false" />
-			<property name="hibernate.c3p0.testConnectionOnCheckin" value="true" />
-			<property name="hibernate.c3p0.idleConnectionTestPeriod" value="60" />
-				
-		</properties>
+			<class>ContractImovel.model.Contrato</class>
+			<class>ContractImovel.model.Fiador</class>
+			<class>ContractImovel.model.Imovel</class>
+			<class>ContractImovel.model.Inqulino</class>
+			<class>ContractImovel.model.Pagamento</class>
+			<class>ContractImovel.model.Usuario</class>
+
+        <properties>
+		<!-- Configurações do Banco via Variáveis de Ambiente -->
+		
+		<!-- URL do banco MySQL RDS -->
+		<property name="javax.persistence.jdbc.url" 
+				  value="${JDBC_URL:jdbc:mysql://${DB_HOST}:${DB_PORT}/locacao?useSSL=false&amp;serverTimezone=UTC}"/>
+		
+		<!-- Usuário do banco -->
+		<property name="javax.persistence.jdbc.user" 
+				  value="${DB_USERNAME}"/>
+		
+		<!-- Senha do banco -->
+		<property name="javax.persistence.jdbc.password" 
+				  value="${DB_PASSWORD}"/>
+		
+		<!-- Driver JDBC MySQL -->
+		<property name="javax.persistence.jdbc.driver" 
+				  value="com.mysql.cj.jdbc.Driver"/>
+		
+		<!-- Configuração do Hibernate JPA -->			
+		<!-- validate | update | create | create-drop -->			
+		<property name="hibernate.hbm2ddl.auto" 
+				  value="${HIBERNATE_DDL_AUTO:update}"/>
+		
+		<property name="hibernate.show_sql" 
+				  value="${HIBERNATE_SHOW_SQL:false}"/>
+		
+		<property name="hibernate.format_sql" 
+				  value="true"/>
+		
+		<property name="hibernate.dialect" 
+				  value="org.hibernate.dialect.MySQL5InnoDBDialect" /> 
+		
+		<property name="hibernate.jdbc.time_zone" 
+				  value="UTC"/>	
+		
+		<!-- Configuração do pool de conexões C3P0 -->
+		<property name="hibernate.c3p0.initialPoolSize" 
+				  value="${DB_POOL_INITIAL:5}"/>
+		
+		<property name="hibernate.c3p0.minPoolSize" 
+				  value="${DB_POOL_MIN:5}" />
+		
+		<property name="hibernate.c3p0.maxPoolSize" 
+				  value="${DB_POOL_MAX:50}" />
+		
+		<property name="hibernate.c3p0.maxIdleTime" 
+				  value="3600" />					
+		
+		<property name="hibernate.c3p0.testConnectionOnCheckout" 
+				  value="false" />
+		
+		<property name="hibernate.c3p0.testConnectionOnCheckin" 
+				  value="true" />
+		
+		<property name="hibernate.c3p0.idleConnectionTestPeriod" 
+				  value="60" />
+		
+		<!-- Configurações adicionais opcionais -->
+		<property name="hibernate.connection.provider_class"
+				  value="org.hibernate.c3p0.internal.C3P0ConnectionProvider"/>
+		
+		<property name="hibernate.c3p0.acquire_increment"
+				  value="1"/>
+		
+		<property name="hibernate.c3p0.max_statements"
+				  value="50"/>
+	</properties>
 
 	</persistence-unit>
 </persistence>
